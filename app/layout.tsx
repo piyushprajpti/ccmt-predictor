@@ -13,10 +13,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "CCMT Predictor | Academic Curator",
+  title: "CCMT College Finder | GATE Cutoff Predictor",
   description:
     "An editorial-grade academic portal for reviewing predictive signals with clarity and depth.",
 };
+
+import { Topbar } from "@/components/topbar";
 
 export default function RootLayout({
   children,
@@ -28,7 +30,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Topbar />
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }
