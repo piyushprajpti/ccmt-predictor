@@ -4,6 +4,7 @@ import React from 'react';
 import { MapPin, BookOpen, Building2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import nirfData from '@/public/nirf_rank.json';
 
 export interface ResultItem {
   year: number;
@@ -69,9 +70,25 @@ export function ResultsTable({
                   <span className="text-base font-semibold text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-2 text-left">
                     {item.institute}
                   </span>
-                  <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                    <MapPin className="size-3.5" />
-                    <span className="truncate">{item.round}</span>
+                  <div className="flex items-center gap-3 text-sm text-on-surface-variant">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="size-3.5 text-primary/70" />
+                      <span className="truncate">{item.round}</span>
+                    </div>
+                    {/* NIRF Rank Display */}
+                    {(() => {
+                      const instName = item.institute.trim().replace(/\s+/g, ' ');
+                      const rankData = (nirfData.institutes as any)[instName];
+                      if (!rankData) return null;
+                      return (
+                        <div className="flex items-center gap-1.5 bg-surface-container-highest/50 px-2.5 py-1 rounded-md border border-outline-variant/10">
+                          <span className="text-[11px] font-bold text-on-surface-variant/70 uppercase tracking-tighter">NIRF</span>
+                          <span className="text-sm font-bold text-primary">
+                            {rankData.display}
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 

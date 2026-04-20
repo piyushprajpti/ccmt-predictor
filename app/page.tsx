@@ -38,7 +38,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/50 border border-outline-variant/10 text-primary text-sm font-bold mb-8 shadow-sm backdrop-blur-md"
           >
             <Sparkles className="size-4" />
-            <span>The All-in-One CCMT Portal (2021-2025)</span>
+            <span>The Best Tool for CCMT Preference Filling</span>
           </motion.div>
 
           <motion.h1
@@ -47,8 +47,8 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-3xl md:text-5xl font-display font-black tracking-tight text-foreground mb-6 leading-tight"
           >
-            Predict Your Future <br />
-            With Precision Data
+            The Smartest Way to <br />
+            Fill Your CCMT Choices
           </motion.h1>
 
           <motion.p
@@ -57,9 +57,10 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            The definitive gateway for CCMT previous years' cutoffs. Access verified, 
-            official data from 2021 to 2025 in one unified platform with 
-            powerful, customizable filters.
+            The most trusted platform for CCMT preference filling. Strategically 
+            select your colleges with 5 years of precision data, integrated 
+            NIRF rankings, and an advanced predictor designed to maximize 
+            your admission chances.
           </motion.p>
 
           <motion.div
@@ -102,9 +103,9 @@ export default function Home() {
           >
             <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center relative z-10">
-              <StatItem label="Data Records" value="50,000+" icon={History} />
-              <StatItem label="Institutions" value="60+" icon={Building2} />
-              <StatItem label="Programs" value="400+" icon={BookOpen} />
+              <StatItem label="Data Records" value="45,000+" icon={History} />
+              <StatItem label="Institutions" value="85+" icon={Building2} />
+              <StatItem label="Programs" value="500+" icon={BookOpen} />
               <StatItem label="Year Range" value="2021-25" icon={Sparkles} />
             </div>
           </motion.div>
@@ -121,7 +122,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-2xl md:text-4xl font-display font-black text-foreground mb-4"
             >
-              Everything You Need in One Place
+              Everything You Need for Perfect Preference Filling
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -130,39 +131,40 @@ export default function Home() {
               transition={{ delay: 0.1 }}
               className="text-on-surface-variant text-base md:text-lg max-w-xl mx-auto"
             >
-              Designed for students, by developers who understand the CCMT struggle. 
-              Clean, fast, and 100% accurate.
+              Build your choice list with confidence using our comprehensive suite 
+              of tools designed specifically for CCMT aspirants.
             </motion.p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard 
-              icon={BarChart3}
-              title="College Predictor"
-              description="Get instant predictions based on your GATE score and category using our high-fidelity trend analysis."
+              icon={Search}
+              title="Unified Explorer"
+              description="Access 5 years of verified cutoff data (2021-2025) with customizable filters to understand college trends."
               delay={0.2}
+              href="/explorer"
+              tag="2021-2025"
+            />
+            <FeatureCard 
+              icon={BarChart3}
+              title="Precision Predictor"
+              description="Get instant predictions based on your GATE score, category, and preferred group using high-fidelity analysis."
+              delay={0.3}
               href="/predictor"
               tag="Popular"
             />
             <FeatureCard 
-              icon={Search}
-              title="Unified Explorer"
-              description="Browse 5 years of cutoffs with customizable filters. No more legacy UI hurdles—just pure data."
-              delay={0.3}
-              href="/explorer"
-              tag="Modern"
-            />
-            <FeatureCard 
-              icon={GraduationCap}
-              title="Institution Directory"
-              description="Explore every participating NIT, IIIT, and GFTI. Compare programs, seats, and fees effortlessly."
+              icon={Building2}
+              title="NIRF Integration"
+              description="Make informed decisions by viewing official NIRF rankings directly alongside college and program data."
               delay={0.4}
               href="/institutes_and_programs"
+              tag="New"
             />
             <FeatureCard 
               icon={CheckCircle2}
               title="Verified Data"
-              description="Sleep easy knowing every cutoff and seat matrix is pulled directly from verified official sources."
+              description="Sleep easy knowing every cutoff, seat matrix, and program detail is pulled directly from verified official sources."
               delay={0.5}
               href="#verified"
               isVerified

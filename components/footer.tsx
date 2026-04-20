@@ -23,7 +23,6 @@ const TABS = [
   { name: "Home", href: "/" },
   { name: "Explorer", href: "/explorer" },
   { name: "Predictor", href: "/predictor" },
-  { name: "Comparison", href: "/comparison" },
   { name: "Institutions & Programs", href: "/institutes_and_programs" },
 ];
 
@@ -113,7 +112,7 @@ export function Footer() {
                 onClick={() => setIsCcmtCardOpen(!isCcmtCardOpen)}
                 className="text-sm text-primary font-bold hover:text-primary/80 transition-colors flex items-center gap-1.5 text-left col-span-2 mt-1"
               >
-                Official CCMT Portals 
+                Official CCMT Min Max Site 
                 <ChevronUp className={cn("size-3.5 transition-transform duration-300", isCcmtCardOpen && "rotate-180")} />
               </button>
 

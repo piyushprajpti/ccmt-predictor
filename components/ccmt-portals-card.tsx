@@ -42,7 +42,7 @@ export function CcmtPortalsCard({
           )}
         >
           <div className="p-4 bg-surface-container-low border-b border-outline-variant/10">
-            <h3 className="text-sm font-bold text-foreground">CCMT Portals</h3>
+            <h3 className="text-sm font-bold text-foreground">CCMT Min Max Site</h3>
             <p className="text-xs text-on-surface-variant">Access official links for each year</p>
           </div>
           <div className="p-2">

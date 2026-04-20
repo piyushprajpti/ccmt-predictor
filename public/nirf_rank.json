@@ -1,0 +1,358 @@
+{
+    "version": "2025.1",
+    "last_updated": "2026-04-20T14:06:29.729Z",
+    "institutes": {
+        "Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior": {
+            "rank": 96,
+            "display": "96"
+        },
+        "Central Institute of Technology, Kokrajhar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Central University Of Kashmir": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Central University of Punjab, Bathinda, Punjab": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Central University of Rajasthan": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Defence Institute of Advanced Technology (Deemed to be University), Girinagar, Pune": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Dr. B R Ambedkar National Institute of Technology, Jalandhar": {
+            "rank": 55,
+            "display": "55"
+        },
+        "Guru Ghasidas Vishwavidyalaya, Bilaspur": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "Indian Institute of Engineering Science and Technology, Shibpur, District Howrah": {
+            "rank": 54,
+            "display": "54"
+        },
+        "Indian Institute of Information Technology (IIIT) Surat": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology (IIIT), Sri City, Chittoor": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology , Kalyani": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology Srirangam, Tiruchirappalli": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology Tiruchirappalli": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology Vadodara": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Allahabad": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "Indian Institute of Information Technology, Bhagalpur, Bihar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Bhopal": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Design & Manufacturing Kancheepuram, Chennai": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "Indian Institute of Information Technology, Design and Manufacturing, Kurnool": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Kota": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Lucknow": {
+            "rank": 201,
+            "display": "201-300"
+        },
+        "Indian Institute of Information Technology, Pune": {
+            "rank": 201,
+            "display": "201-300"
+        },
+        "Indian Institute of Information Technology, Una": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Vadodara, Diu Campus": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Information Technology, Vadodara, Gandhinagar Campus": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Indian Institute of Space Science and Technology, Thiruvananthapuram": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Institute of Infrastructure, Technology, Research And Management, Ahmedabad": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "International Institute of Information Technology, Bhubaneswar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "International Institute of Information Technology, Naya Raipur": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Jawaharlal Nehru University, New Delhi": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Malaviya National Institute of Technology Jaipur": {
+            "rank": 42,
+            "display": "42"
+        },
+        "Maulana Azad National Institute of Technology Bhopal": {
+            "rank": 80,
+            "display": "80"
+        },
+        "Motilal Nehru National Institute of Technology Allahabad": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "NIELIT Deemed to be University Agartala": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University Imphal": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University Itanagar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University Kohima": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University- Ajmer": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University- Gorakhpur": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University- Ropar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "NIELIT Deemed to be University- Srinagar": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Advanced manufacturing Technology, Hatia, Ranchi": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Electronics and Information Technology (NIELIT), Aizawl": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Electronics and Information Technology, Aurangabad": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Electronics and Information Technology, Calicut": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Foundry & Forge Technology, Hatia, Ranchi": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technical Teachers Training & Research, Kolkata": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technical Teachers Training and Research, Chandigarh": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technical Teacher’s Training and Research (NITTTR), Bhopal": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technology Agartala": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "National Institute of Technology Andhra Pradesh": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technology Arunachal Pradesh": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technology Calicut": {
+            "rank": 25,
+            "display": "25"
+        },
+        "National Institute of Technology Delhi": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "National Institute of Technology Durgapur": {
+            "rank": 49,
+            "display": "49"
+        },
+        "National Institute of Technology Goa": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "National Institute of Technology Hamirpur": {
+            "rank": 97,
+            "display": "97"
+        },
+        "National Institute of Technology Karnataka, Surathkal": {
+            "rank": 17,
+            "display": "17"
+        },
+        "National Institute of Technology Meghalaya": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "National Institute of Technology Mizoram": {
+            "rank": 201,
+            "display": "201-300"
+        },
+        "National Institute of Technology Nagaland": {
+            "rank": 201,
+            "display": "201-300"
+        },
+        "National Institute of Technology Patna": {
+            "rank": 53,
+            "display": "53"
+        },
+        "National Institute of Technology Puducherry": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technology Raipur": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "National Institute of Technology Sikkim": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "National Institute of Technology Uttarakhand": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "National Institute of Technology, Andhra Pradesh": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "National Institute of Technology, Jamshedpur": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "National Institute of Technology, Kurukshetra": {
+            "rank": 85,
+            "display": "85"
+        },
+        "National Institute of Technology, Manipur": {
+            "rank": 151,
+            "display": "151-200"
+        },
+        "National Institute of Technology, Rourkela": {
+            "rank": 13,
+            "display": "13"
+        },
+        "National Institute of Technology, Silchar": {
+            "rank": 50,
+            "display": "50"
+        },
+        "National Institute of Technology, Srinagar": {
+            "rank": 73,
+            "display": "73"
+        },
+        "National Institute of Technology, Tiruchirappalli": {
+            "rank": 9,
+            "display": "9"
+        },
+        "National Institute of Technology, Warangal": {
+            "rank": 21,
+            "display": "21"
+        },
+        "Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacturing Jabalpur": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Punjab Engineering College, Chandigarh": {
+            "rank": 101,
+            "display": "101-150"
+        },
+        "Sant Longowal Institute of Engineering and Technology": {
+            "rank": 201,
+            "display": "201-300"
+        },
+        "Sardar Patel University of Police, Security and Criminal Justice Jodhpur": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Sardar Vallabhbhai National Institute of Technology, Surat": {
+            "rank": 66,
+            "display": "66"
+        },
+        "School of Planning & Architecture: Vijayawada": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "School of Planning and Architecture, Bhopal": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Shri Mata Vaishno Devi University, Katra": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Sree Chitra Tirunal Institute for Medical Sciences and Technology (SCTIMST), Trivandrum.": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "University Institute of Engineering and Technology, Panjab University, Chandigarh": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "University of Hyderabad": {
+            "rank": null,
+            "display": "Not Ranked"
+        },
+        "Visvesvaraya National Institute of Technology, Nagpur": {
+            "rank": null,
+            "display": "Not Ranked"
+        }
+    }
+}

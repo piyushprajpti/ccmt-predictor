@@ -15,7 +15,6 @@ const TABS = [
   { name: "Home", href: "/" },
   { name: "Explorer", href: "/explorer" },
   { name: "Predictor", href: "/predictor" },
-  { name: "Comparison", href: "/comparison" },
   { name: "Institutions & Programs", href: "/institutes_and_programs" },
 ];
 
@@ -127,7 +126,7 @@ export function Topbar() {
               className="hidden sm:flex items-center gap-2 font-bold px-5 h-10 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/10"
               onClick={() => setIsCcmtCardOpen(!isCcmtCardOpen)}
             >
-              Official CCMT Portal
+              Official CCMT Min Max Site
               <ChevronDown className={cn("size-4 transition-transform duration-300", isCcmtCardOpen && "rotate-180")} />
             </Button>
 
