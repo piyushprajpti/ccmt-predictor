@@ -1,20 +1,20 @@
 "use client";
 
 import React from 'react';
-import { X, ChevronLeft, ChevronRight, ListFilter, SortAsc, MapPin, GraduationCap } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ListFilter, SortAsc, SortDesc, MapPin, BookOpen, ChevronDown, Calendar, ArrowUpNarrowWide, ArrowDownWideNarrow } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 interface ResultItem {
-  "Sr.No": number;
-  Round: string;
-  Institute: string;
-  "PG Program": string;
-  Group: string;
-  Category: string;
-  "Max GATE Score": number;
-  "Min GATE Score": number;
+  year: number;
+  round: string;
+  institute: string;
+  program: string;
+  group: string;
+  category: string;
+  openingRank: number;
+  closingRank: number;
 }
 
 interface ResultsListProps {
@@ -30,6 +30,8 @@ interface ResultsListProps {
   };
   onRemoveFilter: (key: string, value: string) => void;
   onClearFilters: () => void;
+  selectedYear: string;
+  setSelectedYear: (year: string) => void;
 }
 
 const ITEMS_PER_PAGE = 20;
@@ -42,10 +44,47 @@ export function ResultsList({
   filters,
   onRemoveFilter,
   onClearFilters,
+  selectedYear,
+  setSelectedYear,
 }: ResultsListProps) {
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = React.useState(false);
+  const [isSortDropdownOpen, setIsSortDropdownOpen] = React.useState(false);
+  const [sortBy, setSortBy] = React.useState<string>("max-desc");
+
+  const yearDropdownRef = React.useRef<HTMLDivElement>(null);
+  const sortDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target as Node)) {
+        setIsYearDropdownOpen(false);
+      }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+        setIsSortDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const sortedResults = React.useMemo(() => {
+    const sorted = [...results];
+    return sorted.sort((a, b) => {
+      switch (sortBy) {
+        case "max-desc": return b.openingRank - a.openingRank;
+        case "max-asc": return a.openingRank - b.openingRank;
+        case "min-desc": return b.closingRank - a.closingRank;
+        case "min-asc": return a.closingRank - b.closingRank;
+        case "inst-asc": return a.institute.localeCompare(b.institute);
+        case "prog-asc": return a.program.localeCompare(b.program);
+        default: return 0;
+      }
+    });
+  }, [results, sortBy]);
+
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedResults = results.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const paginatedResults = sortedResults.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const hasFilters = Object.values(filters).some(arr => arr.length > 0);
 
@@ -57,7 +96,7 @@ export function ResultsList({
           <span className="text-sm font-semibold text-on-surface-variant uppercase tracking-normal mr-2">
             Selected Filters:
           </span>
-          {Object.entries(filters).map(([key, values]) => 
+          {Object.entries(filters).map(([key, values]) =>
             values.map(value => (
               <button
                 key={`${key}-${value}`}
@@ -80,26 +119,116 @@ export function ResultsList({
       )}
 
       {/* Stats and Sort */}
-      <div className="flex items-center justify-between mb-4 bg-surface-container/60 backdrop-blur-sm p-5 rounded-2xl border border-outline-variant/20 shadow-sm">
-        <p className="text-base text-on-surface font-medium">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 bg-surface-container/60 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-outline-variant/20 shadow-sm">
+        <p className="text-sm sm:text-base text-on-surface font-medium text-center sm:text-left">
           Showing <span className="font-bold text-primary">{Math.min(startIndex + 1, totalCount)}-{Math.min(startIndex + ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-bold text-primary">{totalCount.toLocaleString()}</span> programs
         </p>
-        <Button variant="ghost" size="sm" className="text-sm font-bold gap-2 border border-outline-variant/30 px-4 h-10 bg-surface-container-lowest hover:bg-surface-container shadow-sm transition-all">
-          <ListFilter className="size-4" />
-          Sort
-        </Button>
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <div className="relative" ref={yearDropdownRef}>
+            <button
+              onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-low"
+            >
+              <Calendar className="size-3.5 sm:size-4 text-primary" />
+              <span>Year: {selectedYear}</span>
+              <ChevronDown className={cn("size-3.5 sm:size-4 text-on-surface-variant transition-transform duration-300", isYearDropdownOpen && "rotate-180")} />
+            </button>
+
+            <AnimatePresence>
+              {isYearDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 4, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute right-0 top-full z-50 mt-1 min-w-[140px] overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-1.5 shadow-2xl shadow-primary/5 backdrop-blur-xl"
+                >
+                  {['2025', '2024', '2023', '2022', '2021'].map((year) => (
+                    <button
+                      key={year}
+                      onClick={() => {
+                        setSelectedYear(year);
+                        setIsYearDropdownOpen(false);
+                      }}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all",
+                        selectedYear === year
+                          ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                          : "text-on-surface hover:bg-surface-container-low hover:text-primary"
+                      )}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="relative" ref={sortDropdownRef}>
+            <button
+              onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-low"
+            >
+              <ListFilter className="size-3.5 sm:size-4 text-primary" />
+              <span className="truncate">Sort: {getSortLabel(sortBy)}</span>
+              <ChevronDown className={cn("size-3.5 sm:size-4 text-on-surface-variant transition-transform duration-300", isSortDropdownOpen && "rotate-180")} />
+            </button>
+
+            <AnimatePresence>
+              {isSortDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 4, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute right-0 top-full z-50 mt-1 min-w-[200px] overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-1.5 shadow-2xl shadow-primary/5 backdrop-blur-xl"
+                >
+                  <div className="px-3 py-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Sort By</div>
+                  {[
+                    { id: 'max-desc', label: 'Max Score (High to Low)', icon: <ArrowDownWideNarrow className="size-4" /> },
+                    { id: 'max-asc', label: 'Max Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
+                    { id: 'min-desc', label: 'Min Score (High to Low)', icon: <ArrowDownWideNarrow className="size-4" /> },
+                    { id: 'min-asc', label: 'Min Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
+                    { id: 'inst-asc', label: 'Institute (A-Z)', icon: <SortAsc className="size-4" /> },
+                    { id: 'prog-asc', label: 'Program (A-Z)', icon: <SortAsc className="size-4" /> },
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => {
+                        setSortBy(option.id);
+                        setIsSortDropdownOpen(false);
+                        setCurrentPage(1);
+                      }}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-all",
+                        sortBy === option.id
+                          ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                          : "text-on-surface hover:bg-surface-container-low hover:text-primary"
+                      )}
+                    >
+                      {option.icon}
+                      {option.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
       {/* Table Container - Scrollable on Mobile */}
       <div className="w-full overflow-x-auto pb-4 custom-scrollbar max-w-full">
         <div className="min-w-[850px]">
           {/* Table Header */}
-          <div className="grid grid-cols-12 gap-4 px-6 py-4 text-sm font-bold uppercase tracking-tight text-on-surface border-b border-outline-variant/10">
-            <div className="col-span-5">Institute</div>
-            <div className="col-span-3">Program</div>
-            <div className="col-span-2">Category</div>
-            <div className="col-span-1 text-right">Max Score</div>
-            <div className="col-span-1 text-right">Min Score</div>
+          <div className="grid grid-cols-[minmax(50px,5%)_minmax(250px,40%)_minmax(180px,25%)_minmax(90px,10%)_minmax(90px,10%)_minmax(90px,10%)] gap-4 px-6 py-4 text-sm font-bold uppercase tracking-tight text-on-surface border-b border-outline-variant/5">
+            <div className="text-center">SR. No.</div>
+            <div className="text-left">Institute</div>
+            <div className="text-left">Program</div>
+            <div className="text-left">Category</div>
+            <div className="whitespace-nowrap text-center">Max Score</div>
+            <div className="whitespace-nowrap text-center">Min Score</div>
           </div>
 
           {/* Results List */}
@@ -108,48 +237,54 @@ export function ResultsList({
               {paginatedResults.length > 0 ? (
                 paginatedResults.map((item, idx) => (
                   <motion.div
-                    key={`${item['Sr.No']}-${item.Round}-${idx}`}
+                    key={`${item.institute}-${item.program}-${item.category}-${item.round}-${idx}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2, delay: idx * 0.02 }}
-                    className="grid grid-cols-12 gap-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors px-6 py-6 group"
+                    className="grid grid-cols-[minmax(50px,5%)_minmax(250px,40%)_minmax(180px,25%)_minmax(90px,10%)_minmax(90px,10%)_minmax(90px,10%)] gap-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors px-6 py-4 group"
                   >
-                    <div className="col-span-5 flex flex-col gap-2">
-                      <span className="text-base font-semibold text-on-surface leading-tight group-hover:text-primary transition-colors">
-                        {item.Institute}
+                    <div className="flex items-center justify-center">
+                      <span className="text-sm font-bold text-on-surface-variant/50 tabular-nums">
+                        {startIndex + idx + 1}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-2 overflow-hidden">
+                      <span className="text-base font-semibold text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-2 text-left">
+                        {item.institute}
                       </span>
                       <div className="flex items-center gap-2 text-sm text-on-surface-variant">
                         <MapPin className="size-3.5" />
-                        <span className="truncate">{item.Round}</span>
+                        <span className="truncate">{item.round}</span>
                       </div>
                     </div>
-                    
-                    <div className="col-span-3 flex flex-col gap-2">
-                      <span className="text-base font-medium text-on-surface leading-tight">
-                        {item["PG Program"]}
+
+                    <div className="flex flex-col gap-2 overflow-hidden">
+                      <span className="text-base font-medium text-on-surface leading-tight line-clamp-2 text-left">
+                        {item.program}
                       </span>
                       <div className="flex items-center gap-2 text-sm text-on-surface-variant">
-                        <GraduationCap className="size-3.5" />
-                        <span>Group {item.Group}</span>
+                        <BookOpen className="size-3.5" />
+                        <span>{item.group}</span>
                       </div>
                     </div>
 
-                    <div className="col-span-2 flex items-center">
-                      <span className="text-sm font-semibold text-on-surface-variant uppercase tracking-normal">
-                        {item.Category}
+                    <div className="flex items-center">
+                      <span className="text-sm font-semibold text-on-surface-variant uppercase tracking-normal text-left">
+                        {item.category}
                       </span>
                     </div>
 
-                    <div className="col-span-1 flex items-center justify-end">
-                      <span className="text-base font-medium text-on-surface tabular-nums">
-                        {item["Max GATE Score"]}
+                    <div className="flex items-center justify-center">
+                      <span className="text-base font-medium text-on-surface tabular-nums whitespace-nowrap">
+                        {item.openingRank}
                       </span>
                     </div>
 
-                    <div className="col-span-1 flex items-center justify-end">
-                      <span className="text-base font-medium text-on-surface-variant tabular-nums">
-                        {item["Min GATE Score"]}
+                    <div className="flex items-center justify-center">
+                      <span className="text-base font-medium text-on-surface-variant tabular-nums whitespace-nowrap">
+                        {item.closingRank}
                       </span>
                     </div>
                   </motion.div>
@@ -194,8 +329,8 @@ export function ResultsList({
                   onClick={() => setCurrentPage(page)}
                   className={cn(
                     "size-9 rounded-full text-sm font-bold transition-all flex items-center justify-center",
-                    currentPage === page 
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110" 
+                    currentPage === page
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110"
                       : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
                   )}
                 >
@@ -224,22 +359,34 @@ export function ResultsList({
 
 function generatePagination(current: number, total: number) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  
+
   const pages: (number | string)[] = [];
   pages.push(1);
-  
+
   if (current > 3) pages.push('...');
-  
+
   const start = Math.max(2, current - 1);
   const end = Math.min(total - 1, current + 1);
-  
+
   for (let i = start; i <= end; i++) {
     if (i !== 1 && i !== total) pages.push(i);
   }
-  
+
   if (current < total - 2) pages.push('...');
-  
+
   pages.push(total);
-  
+
   return pages;
+}
+
+function getSortLabel(id: string) {
+  switch (id) {
+    case "max-desc": return "Max Score ↓";
+    case "max-asc": return "Max Score ↑";
+    case "min-desc": return "Min Score ↓";
+    case "min-asc": return "Min Score ↑";
+    case "inst-asc": return "Institute";
+    case "prog-asc": return "Program";
+    default: return "Default";
+  }
 }
