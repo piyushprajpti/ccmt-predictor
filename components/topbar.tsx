@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { ChevronDown, ExternalLink, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
 import { CcmtPortalsCard } from "./ccmt-portals-card";
 
@@ -57,6 +58,13 @@ export function Topbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Reset topbar visibility and mobile menu on route change
+  React.useEffect(() => {
+    setIsVisible(true);
+    setIsMobileMenuOpen(false);
+    setIsCcmtCardOpen(false);
+  }, [pathname]);
+
   return (
     <motion.header 
       initial={{ y: 0 }}
@@ -67,7 +75,15 @@ export function Topbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-xl font-display font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+          <div className="relative size-10 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+            <Image 
+              src="/ccmt_logo.png" 
+              alt="CCMT Logo" 
+              fill
+              className="object-contain"
+            />
+          </div>
+          <span className="text-xl font-display font-bold tracking-tight text-foreground group-hover:text-primary transition-colors hidden sm:inline-block">
             CCMT<span className="text-on-surface-variant group-hover:text-primary/80"> College Finder</span>
           </span>
         </Link>

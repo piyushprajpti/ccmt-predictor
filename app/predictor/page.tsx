@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PredictorHeader } from "@/components/predictor/PredictorHeader";
 import { PredictorForm } from "@/components/predictor/PredictorForm";
 import { PredictorResults } from "@/components/predictor/PredictorResults";
 import { LoadingScreen } from "@/components/ui/loading-screen";
+import { HeroSection } from "@/components/shared/HeroSection";
 import { motion, AnimatePresence } from "framer-motion";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Sparkles, ArrowRight } from "lucide-react";
 import { checkEligibility } from "@/lib/eligibility";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function PredictorPage() {
   const [data, setData] = useState<any[]>([]);
@@ -41,7 +43,7 @@ export default function PredictorPage() {
         if (item.category !== predictionParams.category) return false;
 
         // 2. Filter user entries that are eligible for this specific program
-        const eligibleEntries = predictionParams.entries.filter(entry => 
+        const eligibleEntries = predictionParams.entries.filter(entry =>
           checkEligibility(item.program, [entry.code])
         );
 
@@ -71,18 +73,21 @@ export default function PredictorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto px-6 pt-12 md:pt-20">
-        <PredictorHeader />
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <main className="container mx-auto px-4 py-8 sm:px-6 lg:py-16 max-w-full overflow-hidden">
+        <HeroSection 
+          title={<>Predict Your <span className="text-primary">Future</span> <br className="hidden md:block" /> College & Program.</>}
+          description={<>Analyze your admission chances across <span className="text-on-surface font-bold">NITs, IIITs, and GFTIs</span> using multi-year historical cutoffs and CCMT's specialized group eligibility system.</>}
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-12">
-          {/* Left Side: Form */}
-          <div className="lg:col-span-4">
+        <div className="mt-0 flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
+          {/* Left Side: Form (Fixed Width like Explorer Sidebar) */}
+          <div className="w-full lg:w-80 lg:border-r border-outline-variant/10 lg:pr-8 lg:sticky lg:top-24">
             <PredictorForm onPredict={handlePredict} isLoading={isPredicting} />
           </div>
 
           {/* Right Side: Results or Placeholder */}
-          <div className="lg:col-span-8 min-h-[600px]" id="results-section">
+          <div className="flex-1 min-w-0 max-w-full" id="results-section">
             <AnimatePresence mode="wait">
               {hasPredicted ? (
                 <motion.div
@@ -103,7 +108,7 @@ export default function PredictorPage() {
                   key="placeholder"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center h-full border-2 border-dashed border-outline-variant/20 rounded-[3rem] p-12 text-center"
+                  className="flex flex-col items-center justify-start pt-20 h-full min-h-[400px] border-2 border-dashed border-outline-variant/20 rounded-[3rem] p-12 text-center bg-surface-container/10"
                 >
                   <div className="size-20 rounded-[2rem] bg-primary/5 flex items-center justify-center mb-6">
                     <BarChart3 className="size-10 text-primary/40" />
@@ -117,7 +122,38 @@ export default function PredictorPage() {
             </AnimatePresence>
           </div>
         </div>
-      </div>
+
+        {/* Permanent Explorer CTA Card (Downsized) */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16 bg-primary rounded-[2.5rem] p-8 md:p-10 text-primary-foreground relative overflow-hidden group shadow-2xl shadow-primary/20 border border-white/10"
+        >
+          <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 blur-[120px] rounded-full pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="text-center md:text-left space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[9px] font-black uppercase tracking-[0.2em]">
+                <Sparkles className="size-3" />
+                Detailed Insights
+              </div>
+              <h3 className="text-2xl md:text-3xl font-display font-black tracking-tight">Dive deeper into the data?</h3>
+              <p className="text-primary-foreground/70 text-sm md:text-base font-medium max-w-xl">
+                Explore the full dataset across 5 years with advanced filters, seat matrices, and institute-wise trends in our specialized explorer.
+              </p>
+            </div>
+
+            <Link href="/explorer" className="shrink-0">
+              <Button size="lg" className="bg-on-primary-fixed text-primary-fixed hover:scale-105 active:scale-95 h-14 px-8 rounded-xl text-lg font-black gap-3 transition-all shadow-xl shadow-black/10">
+                Open Explorer
+                <ArrowRight className="size-5" />
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+      </main>
     </div>
   );
 }

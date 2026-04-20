@@ -29,6 +29,13 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
         setDirection(0);
       }
       setPrevPathname(pathname);
+      
+      // Force scroll to top instantly on route change
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'
+      });
     }
   }, [pathname, prevPathname]);
 

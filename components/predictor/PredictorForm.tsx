@@ -89,37 +89,47 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-surface-container rounded-[2rem] p-5 md:p-6 border border-outline-variant/40 shadow-2xl shadow-primary/5 sticky top-24"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="flex flex-col gap-6"
     >
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Year & Category Row */}
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Predict for Year</label>
-            <CustomSelect
-              value={year}
-              onChange={setYear}
-              options={YEARS}
-            />
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+            <Calculator className="size-5" />
+            Parameters
+          </h2>
+          <p className="text-sm text-on-surface-variant mt-1 tracking-tight">Set your scores</p>
+        </div>
+      </div>
 
-          <div className="space-y-3">
-            <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Your Category</label>
-            <CustomSelect
-              value={category}
-              onChange={setCategory}
-              options={CATEGORIES}
-            />
+      <form onSubmit={handleSubmit} className="flex flex-col gap-1">
+        {/* Year & Category Row */}
+        <div className="border-b border-outline-variant/10 py-6 first:pt-0">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Predict for Year</label>
+              <CustomSelect
+                value={year}
+                onChange={setYear}
+                options={YEARS}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Your Category</label>
+              <CustomSelect
+                value={category}
+                onChange={setCategory}
+                options={CATEGORIES}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="h-px bg-outline-variant/30" />
-
         {/* Paper Entries Section */}
-        <div className="space-y-4">
-          <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1 block">GATE Paper(s) & Scores</label>
+        <div className="border-b border-outline-variant/10 py-6">
+          <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1 block mb-4">GATE Paper(s) & Scores</label>
           <div className="space-y-4">
             <AnimatePresence mode="popLayout">
               {entries.map((entry, index) => (
@@ -128,7 +138,7 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="relative p-4 rounded-[1.5rem] bg-background border border-outline-variant/30 shadow-sm group/entry"
+                  className="relative p-4 rounded-[1.5rem] bg-surface-container/50 border border-outline-variant/30 shadow-sm group/entry"
                 >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2">
@@ -168,20 +178,20 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
             type="button"
             variant="ghost"
             onClick={addEntry}
-            className="w-full h-11 rounded-2xl border-2 border-dashed border-outline-variant/20 hover:border-primary/40 hover:bg-primary/5 text-primary text-[10px] font-black uppercase tracking-widest gap-2 transition-all"
+            className="w-full h-11 rounded-2xl border-2 border-dashed border-outline-variant/20 hover:border-primary/40 hover:bg-primary/5 text-primary text-[10px] font-black uppercase tracking-widest gap-2 mt-4 transition-all"
           >
             <Plus className="size-3.5" /> Add Paper
           </Button>
         </div>
 
-        <div className="space-y-4">
+        <div className="py-6">
           <AnimatePresence>
             {error && (
               <motion.div
                 initial={{ opacity: 0, height: 0, y: 10 }}
                 animate={{ opacity: 1, height: "auto", y: 0 }}
                 exit={{ opacity: 0, height: 0, y: 10 }}
-                className="flex items-center gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold overflow-hidden"
+                className="flex items-center gap-3 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-bold overflow-hidden mb-4"
               >
                 <div className="size-5 rounded-full bg-destructive/20 flex items-center justify-center shrink-0">
                   <span className="text-[10px]">!</span>
@@ -190,26 +200,27 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
 
-        <Button
-          type="submit"
-          className="w-full h-14 rounded-[1.25rem] text-sm font-black gap-3 shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all bg-primary text-primary-foreground"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <div className="flex items-center gap-2">
-              <div className="size-4 border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin rounded-full" />
-              <span className="uppercase tracking-[0.1em]">Processing...</span>
-            </div>
-          ) : (
-            <>
-              <Calculator className="size-5" />
-              <span className="uppercase tracking-[0.1em]">Predict My Colleges</span>
-            </>
-          )}
-        </Button>
+          <Button
+            type="submit"
+            className="w-full h-14 rounded-[1.25rem] text-sm font-black gap-3 shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all bg-primary text-primary-foreground"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="size-4 border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin rounded-full" />
+                <span className="uppercase tracking-[0.1em]">Processing...</span>
+              </div>
+            ) : (
+              <>
+                <Calculator className="size-5" />
+                <span className="uppercase tracking-[0.1em]">Predict My Colleges</span>
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </motion.div>
+
   );
 }

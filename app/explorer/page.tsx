@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { ExplorerHeader } from '@/components/explorer/ExplorerHeader';
 import { FilterSidebar } from '@/components/explorer/FilterSidebar';
 import { ResultsList } from '@/components/explorer/ResultsList';
 import { LoadingScreen } from '@/components/ui/loading-screen';
-import { Loader2 } from 'lucide-react';
+import { HeroSection } from '@/components/shared/HeroSection';
 
 export default function ExplorerPage() {
   const [data, setData] = useState<any[]>([]);
@@ -127,9 +126,12 @@ export default function ExplorerPage() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <main className="container mx-auto px-4 py-8 sm:px-6 lg:py-16 max-w-full overflow-hidden">
-        <ExplorerHeader />
+        <HeroSection 
+          title={<>Explore <span className="text-primary">Cutoff</span> <br className="hidden md:block" /> Trends & Patterns.</>}
+          description={<>Comprehensive historical GATE cutoff data across <span className="text-on-surface font-bold">NITs, IIITs, and GFTIs</span>. Curated for precision analysis and strategic planning.</>}
+        />
 
-        <div className="mt-8 flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
+        <div className="mt-0 flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
           <FilterSidebar
             filters={filters}
             setFilters={setFilters}

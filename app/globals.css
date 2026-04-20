@@ -167,7 +167,7 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply scroll-smooth font-sans overflow-x-hidden;
+    @apply font-sans overflow-x-hidden;
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden;

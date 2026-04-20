@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   title: "CCMT College Finder | NIT/IIIT Predictor",
   description:
     "An editorial-grade academic portal for reviewing predictive signals with clarity and depth.",
+  icons: {
+    icon: "/ccmt_logo.png",
+    shortcut: "/ccmt_logo.png",
+    apple: "/ccmt_logo.png",
+  },
 };
 
 import { Topbar } from "@/components/topbar";

@@ -11,7 +11,8 @@ import {
   Code, 
   User, 
   Smartphone,
-  ChevronUp
+  ChevronUp,
+  MessageSquare
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -173,9 +174,55 @@ export function Footer() {
             </div>
           </motion.div>
         </div>
+        
+        {/* GitHub Issues & Feedback Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-12 p-6 rounded-2xl bg-surface-container-low/60 border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative group backdrop-blur-sm"
+        >
+          {/* Subtle background glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          
+          <div className="flex flex-col gap-1 text-center md:text-left relative z-10">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-primary">
+              <MessageSquare className="w-5 h-5" />
+              <h3 className="font-display font-bold text-lg tracking-tight">Have feedback or found a bug?</h3>
+            </div>
+            <p className="text-on-surface-variant text-sm max-w-2xl">
+              If you encounter any issues, bugs, or want to suggest new features, please create an issue on our GitHub repository.
+            </p>
+          </div>
+          
+          <Link 
+            href="https://github.com/piyushprajpti/ccmt-predictor" 
+            target="_blank"
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-highest text-on-surface font-bold text-sm border border-outline-variant/30 transition-all hover:bg-surface-container-lowest hover:shadow-md active:scale-95 whitespace-nowrap z-10"
+          >
+            <Image 
+              src="/github.png" 
+              alt="GitHub" 
+              width={20} 
+              height={20} 
+              className="object-contain"
+            />
+            <span>Create GitHub Issue</span>
+            <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        </motion.div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-outline-variant/20 flex justify-center items-center">
+        <div className="mt-12 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-center items-center gap-4">
+          <div className="relative size-8 opacity-80">
+            <Image 
+              src="/ccmt_logo.png" 
+              alt="CCMT Logo" 
+              fill
+              className="object-contain"
+            />
+          </div>
           <div className="text-on-surface-variant text-xs font-medium text-center">
             <span>© {currentYear} CCMT College Finder. All Rights Reserved.</span>
           </div>
