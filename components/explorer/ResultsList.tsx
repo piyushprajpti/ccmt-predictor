@@ -119,7 +119,7 @@ export function ResultsList({
       )}
 
       {/* Stats and Sort */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 bg-surface-container/60 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-outline-variant/20 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 bg-surface-container p-4 sm:p-5 rounded-2xl border border-outline-variant/30 shadow-sm">
         <p className="text-sm sm:text-base text-on-surface font-medium text-center sm:text-left">
           Showing <span className="font-bold text-primary">{Math.min(startIndex + 1, totalCount)}-{Math.min(startIndex + ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-bold text-primary">{totalCount.toLocaleString()}</span> programs
         </p>
@@ -127,7 +127,7 @@ export function ResultsList({
           <div className="relative" ref={yearDropdownRef}>
             <button
               onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-low"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/40 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-high"
             >
               <Calendar className="size-3.5 sm:size-4 text-primary" />
               <span>Year: {selectedYear}</span>
@@ -190,7 +190,7 @@ export function ResultsList({
                     { id: 'max-asc', label: 'Max Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
                     { id: 'min-desc', label: 'Min Score (High to Low)', icon: <ArrowDownWideNarrow className="size-4" /> },
                     { id: 'min-asc', label: 'Min Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
-                    { id: 'inst-asc', label: 'Institute (A-Z)', icon: <SortAsc className="size-4" /> },
+                    { id: 'inst-asc', label: 'Institution (A-Z)', icon: <SortAsc className="size-4" /> },
                     { id: 'prog-asc', label: 'Program (A-Z)', icon: <SortAsc className="size-4" /> },
                   ].map((option) => (
                     <button
@@ -224,7 +224,7 @@ export function ResultsList({
           {/* Table Header */}
           <div className="grid grid-cols-[minmax(50px,5%)_minmax(250px,40%)_minmax(180px,25%)_minmax(90px,10%)_minmax(90px,10%)_minmax(90px,10%)] gap-4 px-6 py-4 text-sm font-bold uppercase tracking-tight text-on-surface border-b border-outline-variant/5">
             <div className="text-center">SR. No.</div>
-            <div className="text-left">Institute</div>
+            <div className="text-left">Institution</div>
             <div className="text-left">Program</div>
             <div className="text-left">Category</div>
             <div className="whitespace-nowrap text-center">Max Score</div>
@@ -232,7 +232,7 @@ export function ResultsList({
           </div>
 
           {/* Results List */}
-          <div className="flex flex-col gap-px bg-outline-variant/5 rounded-2xl overflow-hidden border border-outline-variant/5">
+          <div className="flex flex-col gap-px bg-outline-variant/10 rounded-2xl overflow-hidden border border-outline-variant/20 shadow-sm">
             <AnimatePresence mode="popLayout">
               {paginatedResults.length > 0 ? (
                 paginatedResults.map((item, idx) => (
@@ -242,7 +242,7 @@ export function ResultsList({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2, delay: idx * 0.02 }}
-                    className="grid grid-cols-[minmax(50px,5%)_minmax(250px,40%)_minmax(180px,25%)_minmax(90px,10%)_minmax(90px,10%)_minmax(90px,10%)] gap-4 bg-surface-container-lowest hover:bg-surface-container-low transition-colors px-6 py-4 group"
+                    className="grid grid-cols-[minmax(50px,5%)_minmax(250px,40%)_minmax(180px,25%)_minmax(90px,10%)_minmax(90px,10%)_minmax(90px,10%)] gap-4 bg-surface-container-low hover:bg-surface-container transition-colors px-6 py-4 group"
                   >
                     <div className="flex items-center justify-center">
                       <span className="text-sm font-bold text-on-surface-variant/50 tabular-nums">
@@ -385,7 +385,7 @@ function getSortLabel(id: string) {
     case "max-asc": return "Max Score ↑";
     case "min-desc": return "Min Score ↓";
     case "min-asc": return "Min Score ↑";
-    case "inst-asc": return "Institute";
+    case "inst-asc": return "Institution";
     case "prog-asc": return "Program";
     default: return "Default";
   }

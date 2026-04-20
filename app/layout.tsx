@@ -32,7 +32,31 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${manrope.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+                  if (!theme) {
+                    theme = supportDarkMode ? 'dark' : 'light';
+                    localStorage.setItem('theme', theme);
+                  }
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <NavigationProvider>
           <Topbar />

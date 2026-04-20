@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const TABS = ["/", "/explorer", "/predictor", "/comparison", "/institutes"];
+const TABS = ["/", "/explorer", "/predictor", "/comparison", "/institutes_and_programs"];
 
 interface NavigationContextType {
   direction: number;

@@ -23,7 +23,7 @@ const TABS = [
   { name: "Explorer", href: "/explorer" },
   { name: "Predictor", href: "/predictor" },
   { name: "Comparison", href: "/comparison" },
-  { name: "Institutes", href: "/institutes" },
+  { name: "Institutions & Programs", href: "/institutes_and_programs" },
 ];
 
 const SOCIAL_LINKS = [
@@ -65,7 +65,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="relative mt-auto border-t border-outline-variant/30 bg-surface-container/30 backdrop-blur-md">
+    <footer className="relative mt-auto border-t border-outline-variant/30 bg-surface-container shadow-inner">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Disclaimer Section */}
@@ -155,7 +155,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     className={cn(
-                      "p-1.5 rounded-lg bg-surface-container/50 border border-outline-variant/10 transition-all duration-300 group hover:bg-surface-container hover:shadow-md text-on-surface-variant",
+                      "p-1.5 rounded-lg bg-surface-container-low border border-outline-variant/20 transition-all duration-300 group hover:bg-surface-container hover:shadow-md text-on-surface-variant",
                       link.color
                     )}
                     title={link.name}

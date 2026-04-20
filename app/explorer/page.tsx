@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { ExplorerHeader } from '@/components/explorer/ExplorerHeader';
 import { FilterSidebar } from '@/components/explorer/FilterSidebar';
 import { ResultsList } from '@/components/explorer/ResultsList';
+import { LoadingScreen } from '@/components/ui/loading-screen';
 import { Loader2 } from 'lucide-react';
 
 export default function ExplorerPage() {
@@ -120,20 +121,7 @@ export default function ExplorerPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center py-32">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-          <Loader2 className="relative size-12 text-primary animate-spin" />
-        </div>
-        <p className="mt-6 text-lg font-bold text-on-surface tracking-tight animate-pulse text-center px-6">
-          Analyzing admission signals...
-        </p>
-        <p className="mt-2 text-sm text-on-surface-variant font-medium text-center px-6">
-          Curating personalized historical cutoffs for you
-        </p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

@@ -3,12 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { ChevronDown, ExternalLink, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
-
 import { CcmtPortalsCard } from "./ccmt-portals-card";
 
 const TABS = [
@@ -16,17 +15,36 @@ const TABS = [
   { name: "Explorer", href: "/explorer" },
   { name: "Predictor", href: "/predictor" },
   { name: "Comparison", href: "/comparison" },
-  { name: "Institutes", href: "/institutes" },
+  { name: "Institutions & Programs", href: "/institutes_and_programs" },
 ];
 
 export function Topbar() {
   const pathname = usePathname();
   const [isCcmtCardOpen, setIsCcmtCardOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  
-  const activeTab = TABS.find(tab => pathname === tab.href)?.name || "Home";
-  
+  const [isVisible, setIsVisible] = React.useState(true);
+  const { scrollY } = useScroll();
   const cardRef = React.useRef<HTMLDivElement>(null);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    
+    if (isMobileMenuOpen) {
+      setIsVisible(true);
+      return;
+    }
+
+    if (latest < 50) {
+      setIsVisible(true);
+    } else if (latest > previous && latest > 100) {
+      setIsVisible(false);
+      setIsCcmtCardOpen(false);
+    } else if (latest < previous) {
+      setIsVisible(true);
+    }
+  });
+
+  const activeTab = TABS.find(tab => pathname === tab.href)?.name || "Home";
 
   // Close card when clicking outside
   React.useEffect(() => {
@@ -40,7 +58,12 @@ export function Topbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-outline-variant/10 bg-background/80 backdrop-blur-xl">
+    <motion.header 
+      initial={{ y: 0 }}
+      animate={{ y: isVisible ? 0 : -100 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="sticky top-0 z-50 w-full border-b border-outline-variant/10 bg-background/80 backdrop-blur-xl"
+    >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -83,20 +106,20 @@ export function Topbar() {
 
           <div className="relative" ref={cardRef}>
             <Button
-              variant="secondary"
+              variant="default"
               size="sm"
-              className="hidden sm:flex items-center gap-2 font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
+              className="hidden sm:flex items-center gap-2 font-bold px-5 h-10 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/10"
               onClick={() => setIsCcmtCardOpen(!isCcmtCardOpen)}
             >
-              Official CCMT Site
-              <ChevronDown className={cn("size-4 transition-transform", isCcmtCardOpen && "rotate-180")} />
+              Official CCMT Portal
+              <ChevronDown className={cn("size-4 transition-transform duration-300", isCcmtCardOpen && "rotate-180")} />
             </Button>
-            
+
             {/* Mobile Official Link Button */}
             <Button
-              variant="secondary"
+              variant="default"
               size="icon-sm"
-              className="flex sm:hidden bg-primary text-primary-foreground hover:bg-primary/90"
+              className="flex sm:hidden rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/10"
               onClick={() => setIsCcmtCardOpen(!isCcmtCardOpen)}
             >
               <ExternalLink className="size-4" />
@@ -135,8 +158,8 @@ export function Topbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
                     "flex items-center px-4 py-3 rounded-xl text-base font-medium transition-colors",
-                    activeTab === tab.name 
-                      ? "bg-primary/10 text-primary" 
+                    activeTab === tab.name
+                      ? "bg-primary/10 text-primary"
                       : "text-on-surface-variant hover:bg-surface-container"
                   )}
                 >
@@ -147,6 +170,6 @@ export function Topbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

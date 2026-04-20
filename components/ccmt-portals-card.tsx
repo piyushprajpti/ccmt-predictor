@@ -35,7 +35,7 @@ export function CcmtPortalsCard({
           exit={{ opacity: 0, y: side === "top" ? 10 : -10, scale: 0.95 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className={cn(
-            "absolute z-50 w-64 overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface shadow-2xl",
+            "absolute z-50 w-64 overflow-hidden rounded-2xl border border-outline-variant/30 bg-surface-container-lowest shadow-2xl",
             side === "top" ? "top-full mt-3" : "bottom-full mb-4",
             align === "right" ? "right-0" : "left-0",
             className

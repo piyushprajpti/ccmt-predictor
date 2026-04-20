@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-primary to-primary-container text-white shadow-[0_18px_40px_rgba(13,28,47,0.12)] hover:shadow-[0_22px_44px_rgba(13,28,47,0.16)]",
+          "bg-primary text-primary-foreground shadow-[0_18px_40px_rgba(13,28,47,0.12)] hover:shadow-[0_22px_44px_rgba(13,28,47,0.16)]",
         outline:
-          "bg-surface-container-low text-foreground ring-1 ring-inset ring-outline-variant/15 hover:bg-surface-container-high aria-expanded:bg-surface-container-high",
+          "bg-surface-container-low/50 text-foreground ring-1 ring-inset ring-outline-variant/40 hover:bg-surface-container-high hover:ring-outline-variant/60 shadow-sm",
         secondary:
-          "bg-surface-container-lowest text-foreground shadow-[0_10px_24px_rgba(13,28,47,0.05)] hover:bg-surface-container-high aria-expanded:bg-surface-container-high",
+          "bg-surface-container-high text-on-surface-variant shadow-[0_10px_24px_rgba(13,28,47,0.08)] hover:bg-surface-tint/20 hover:text-primary",
         ghost:
           "bg-transparent text-foreground hover:bg-surface-container-high/70 aria-expanded:bg-surface-container-high/70",
         destructive:

@@ -41,8 +41,8 @@ export function PageTransition({ children }: PageTransitionProps) {
         animate="animate"
         exit="exit"
         transition={{ 
-          duration: 0.35, 
-          ease: [0.22, 1, 0.36, 1] 
+          duration: 0.3, 
+          ease: "easeInOut" 
         }}
         className="flex-1 flex flex-col"
       >

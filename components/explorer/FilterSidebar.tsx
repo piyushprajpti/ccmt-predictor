@@ -63,7 +63,7 @@ export function FilterSidebar({ filters, setFilters, availableValues }: FilterSi
         />
         
         <FilterSection
-          title="Institutes"
+          title="Institutions"
           icon={<Building2 className="size-5" />}
           items={availableValues.institutes}
           selectedItems={filters.institutes}
