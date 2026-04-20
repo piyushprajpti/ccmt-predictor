@@ -1,166 +1,152 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { ExplorerHeader } from '@/components/explorer/ExplorerHeader';
-import { FilterSidebar } from '@/components/explorer/FilterSidebar';
-import { ResultsList } from '@/components/explorer/ResultsList';
-import { Loader2 } from 'lucide-react';
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Search, Compass, BarChart3, GraduationCap, ArrowRight, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const [data, setData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const [filters, setFilters] = useState({
-    rounds: [] as string[],
-    institutes: [] as string[],
-    programs: [] as string[],
-    categories: [] as string[],
-  });
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [selectedYear, setSelectedYear] = useState("2025");
-
-  // Load data
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/ccmt_${selectedYear}.json`);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const jsonData = await response.json();
-        setData(jsonData);
-        setError(null);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, [selectedYear]);
-
-  // Compute unique values for filters (interdependent)
-  const availableValues = useMemo(() => {
-    if (data.length === 0) return { rounds: [], institutes: [], programs: [], categories: [] };
-
-    const getFilteredValues = (excludeKey: string) => {
-      return data.filter(item => {
-        const matchRound = excludeKey === 'rounds' || filters.rounds.length === 0 || filters.rounds.includes(item.round);
-        const matchInstitute = excludeKey === 'institutes' || filters.institutes.length === 0 || filters.institutes.includes(item.institute);
-        const matchProgram = excludeKey === 'programs' || filters.programs.length === 0 || filters.programs.includes(item.program);
-        const matchCategory = excludeKey === 'categories' || filters.categories.length === 0 || filters.categories.includes(item.category);
-        return matchRound && matchInstitute && matchProgram && matchCategory;
-      });
-    };
-
-    return {
-      rounds: Array.from(new Set(data.map(item => item.round))).sort((a, b) => {
-        if (a === "National Spot Round") return 1;
-        if (b === "National Spot Round") return -1;
-        return a.localeCompare(b);
-      }),
-      institutes: Array.from(new Set(getFilteredValues('institutes').map(item => item.institute))).sort(),
-      programs: Array.from(new Set(getFilteredValues('programs').map(item => item.program))).sort(),
-      categories: Array.from(new Set(getFilteredValues('categories').map(item => item.category))).sort(),
-    };
-  }, [data, filters]);
-
-  // Filtering logic
-  const filteredData = useMemo(() => {
-    if (data.length === 0) return [];
-
-    return data.filter(item => {
-      const matchRound = filters.rounds.length === 0 || filters.rounds.includes(item.round);
-      const matchInstitute = filters.institutes.length === 0 || filters.institutes.includes(item.institute);
-      const matchProgram = filters.programs.length === 0 || filters.programs.includes(item.program);
-      const matchCategory = filters.categories.length === 0 || filters.categories.includes(item.category);
-
-      return matchRound && matchInstitute && matchProgram && matchCategory;
-    });
-  }, [data, filters]);
-
-  // Reset page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters, selectedYear]);
-
-  const removeFilter = (key: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: prev[key as keyof typeof prev].filter(v => v !== value)
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      rounds: [],
-      institutes: [],
-      programs: [],
-      categories: [],
-    });
-  };
-
-  if (error) {
-    return (
-      <div className="flex min-h-screen items-center justify-center p-6 text-center">
-        <div className="max-w-md bg-destructive/10 p-8 rounded-3xl border border-destructive/20">
-          <h2 className="text-xl font-bold text-destructive">Error Loading Data</h2>
-          <p className="mt-2 text-on-surface-variant">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-xl font-bold"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-md">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-          <Loader2 className="relative size-12 text-primary animate-spin" />
-        </div>
-        <p className="mt-6 text-lg font-bold text-on-surface tracking-tight animate-pulse text-center px-6">
-          Analyzing admission signals...
-        </p>
-        <p className="mt-2 text-sm text-on-surface-variant font-medium text-center px-6">
-          Curating personalized historical cutoffs for you
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <main className="container mx-auto px-4 py-8 sm:px-6 lg:py-16 max-w-full overflow-hidden">
-        <ExplorerHeader />
-
-        <div className="mt-8 flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
-          <FilterSidebar
-            filters={filters}
-            setFilters={setFilters}
-            availableValues={availableValues}
-          />
-
-          <ResultsList
-            results={filteredData}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalCount={filteredData.length}
-            filters={filters}
-            onRemoveFilter={removeFilter}
-            onClearFilters={clearFilters}
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-          />
+    <div className="min-h-screen bg-background selection:bg-primary/30">
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-32 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
-      </main>
+
+        <div className="container mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container/50 border border-outline-variant/10 text-primary text-sm font-bold mb-8 shadow-sm backdrop-blur-md"
+          >
+            <Sparkles className="size-4" />
+            <span>Updated for 2025 Admissions</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-5xl md:text-7xl font-display font-black tracking-tight text-foreground mb-6"
+          >
+            Your Journey to <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary animate-gradient">
+              Top Engineering Colleges
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            Predict your chances, explore historical cutoffs, and compare institutions 
+            with India's most accurate CCMT companion. Powered by multi-year data.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <Link href="/explorer">
+              <Button size="lg" className="h-14 px-8 rounded-2xl text-lg font-bold gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                Start Exploring
+                <ArrowRight className="size-5" />
+              </Button>
+            </Link>
+            <Link href="/predictor">
+              <Button size="lg" variant="secondary" className="h-14 px-8 rounded-2xl text-lg font-bold gap-2 hover:scale-105 transition-transform">
+                Predict My Rank
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-24 bg-surface-container/20">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <FeatureCard 
+              icon={Search}
+              title="Smart Explorer"
+              description="Deep dive into 5 years of CCMT data with advanced filters for rounds, categories, and institutes."
+              delay={0.4}
+              href="/explorer"
+            />
+            <FeatureCard 
+              icon={BarChart3}
+              title="Rank Predictor"
+              description="AI-driven predictions based on your GATE score and historical trends to find your perfect match."
+              delay={0.5}
+              href="/predictor"
+            />
+            <FeatureCard 
+              icon={Compass}
+              title="College Comparison"
+              description="Side-by-side comparison of placement stats, fees, and cutoff trends across multiple NITs & IIITs."
+              delay={0.6}
+              href="/comparison"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-6">
+          <div className="rounded-[3rem] bg-gradient-to-br from-primary/10 via-background to-secondary/10 border border-outline-variant/10 p-12 md:p-20 relative overflow-hidden">
+            <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center relative z-10">
+              <StatItem label="Institutes" value="60+" />
+              <StatItem label="Programs" value="400+" />
+              <StatItem label="Data Points" value="50k+" />
+              <StatItem label="Happy Students" value="10k+" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FeatureCard({ icon: Icon, title, description, delay, href }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay }}
+      className="group p-8 rounded-[2rem] bg-surface border border-outline-variant/10 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
+    >
+      <div className="size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+        <Icon className="size-7" />
+      </div>
+      <h3 className="text-2xl font-display font-bold text-foreground mb-3">{title}</h3>
+      <p className="text-on-surface-variant leading-relaxed mb-6">
+        {description}
+      </p>
+      <Link href={href} className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+        Try Now <ArrowRight className="size-4" />
+      </Link>
+    </motion.div>
+  );
+}
+
+function StatItem({ label, value }: { label: string, value: string }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-4xl md:text-5xl font-display font-black text-foreground tracking-tight">{value}</span>
+      <span className="text-sm font-bold text-on-surface-variant uppercase tracking-widest">{label}</span>
     </div>
   );
 }

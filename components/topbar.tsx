@@ -9,19 +9,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 
+import { CcmtPortalsCard } from "./ccmt-portals-card";
+
 const TABS = [
-  { name: "Explorer", href: "/" },
+  { name: "Home", href: "/" },
+  { name: "Explorer", href: "/explorer" },
   { name: "Predictor", href: "/predictor" },
   { name: "Comparison", href: "/comparison" },
   { name: "Institutes", href: "/institutes" },
-];
-
-const CCMT_LINKS = [
-  { year: "2021", url: "https://admissions.nic.in/admiss/admissions/orcrjacd/105012121" },
-  { year: "2022", url: "https://admissions.nic.in/admiss/admissions/orcrjacd/105012221" },
-  { year: "2023", url: "https://admissions.nic.in/admiss/admissions/orcrjacd/105012321" },
-  { year: "2024", url: "https://admissions.nic.in/admiss/admissions/orcrjacd/105012421" },
-  { year: "2025", url: "https://admissions.nic.in/CCMT/Applicant/Report/orcrreport.aspx?enc=Nm7QwHILXclJQSv2YVS+7oyfr3QTMnD485kebzU4RQjHPShCZV1JNhAqXFSs1WVi" },
 ];
 
 export function Topbar() {
@@ -29,7 +24,7 @@ export function Topbar() {
   const [isCcmtCardOpen, setIsCcmtCardOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   
-  const activeTab = TABS.find(tab => pathname === tab.href)?.name || "Explorer";
+  const activeTab = TABS.find(tab => pathname === tab.href)?.name || "Home";
   
   const cardRef = React.useRef<HTMLDivElement>(null);
 
@@ -64,7 +59,13 @@ export function Topbar() {
                 activeTab === tab.name ? "text-primary" : "text-on-surface-variant"
               )}
             >
-              {tab.name}
+              <motion.span
+                whileHover={{ x: 2 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block"
+              >
+                {tab.name}
+              </motion.span>
               {activeTab === tab.name && (
                 <motion.div
                   layoutId="activeTab"
@@ -102,36 +103,7 @@ export function Topbar() {
             </Button>
 
             {/* Official Site Card/Popover */}
-            <AnimatePresence>
-              {isCcmtCardOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface shadow-2xl"
-                >
-                  <div className="p-4 bg-surface-container-low border-b border-outline-variant/10">
-                    <h3 className="text-sm font-bold text-foreground">CCMT Portals</h3>
-                    <p className="text-xs text-on-surface-variant">Access official links for each year</p>
-                  </div>
-                  <div className="p-2">
-                    {CCMT_LINKS.map((link) => (
-                      <a
-                        key={link.year}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-on-surface hover:bg-surface-container transition-colors"
-                      >
-                        CCMT {link.year}
-                        <ExternalLink className="size-3.5 text-on-surface-variant" />
-                      </a>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <CcmtPortalsCard isOpen={isCcmtCardOpen} side="top" align="right" />
           </div>
 
           {/* Mobile Menu Toggle */}
