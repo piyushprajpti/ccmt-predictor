@@ -66,7 +66,7 @@ export default function RootLayout({
         <NavigationProvider>
           <Topbar />
           <PageTransition>
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 pt-16">{children}</main>
           </PageTransition>
           <Footer />
         </NavigationProvider>

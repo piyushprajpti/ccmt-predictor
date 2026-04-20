@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Program } from '@/app/institutes_and_programs/page';
+import { Program } from '@/lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, School, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';

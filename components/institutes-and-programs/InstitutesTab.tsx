@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Institute } from '@/app/institutes_and_programs/page';
-import { InstituteCard } from './InstituteCard';
+import { Institute } from '@/lib/types';
+import { InstituteCard } from '@/components/institutes-and-programs/InstituteCard';
 import { motion } from 'framer-motion';
 import { LayoutGrid, AlertCircle } from 'lucide-react';
 
@@ -14,7 +14,7 @@ interface InstitutesTabProps {
 const CATEGORIES = ["NIT", "IIIT", "State University", "Other"] as const;
 
 export function InstitutesTab({ institutes, searchQuery }: InstitutesTabProps) {
-  const filteredInstitutes = institutes.filter(inst => 
+  const filteredInstitutes = institutes.filter(inst =>
     inst.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -42,9 +42,9 @@ export function InstitutesTab({ institutes, searchQuery }: InstitutesTabProps) {
   return (
     <div className="space-y-12">
       <div className="md:hidden mb-6">
-        <p className="text-xs font-black uppercase tracking-widest text-primary/60 px-1">Browse by Category</p>
+        <p className="text-xs font-extrabold uppercase tracking-widest text-primary/60 px-1">Browse by Category</p>
       </div>
-      
+
       {CATEGORIES.map((category) => {
         const categoryInstitutes = groupedInstitutes[category];
         if (categoryInstitutes.length === 0) return null;
@@ -53,9 +53,9 @@ export function InstitutesTab({ institutes, searchQuery }: InstitutesTabProps) {
           <section key={category} className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="h-8 w-1.5 rounded-full bg-primary" />
-              <h2 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2">
-                {category === "Other" ? "Other Participating Institutes (GFTIs)" : 
-                 category === "State University" ? "State Universities" : `${category}s`}
+              <h2 className="text-2xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+                {category === "Other" ? "Other Participating Institutes (GFTIs)" :
+                  category === "State University" ? "State Universities" : `${category}s`}
                 <span className="text-sm font-medium text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-md">
                   {categoryInstitutes.length}
                 </span>

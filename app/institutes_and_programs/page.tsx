@@ -8,17 +8,9 @@ import { Search, School, GraduationCap, LayoutGrid, List } from 'lucide-react';
 import { InstitutesTab } from '@/components/institutes-and-programs/InstitutesTab';
 import { ProgramsTab } from '@/components/institutes-and-programs/ProgramsTab';
 import { cn } from '@/lib/utils';
+import { Institute, Program } from '@/lib/types';
 
-export type Institute = {
-  name: string;
-  category: "NIT" | "IIIT" | "State University" | "Other";
-  programs: string[];
-};
 
-export type Program = {
-  name: string;
-  institutes: string[];
-};
 
 export default function InstitutesAndProgramsPage() {
   const [data, setData] = useState<any[]>([]);
@@ -65,7 +57,7 @@ export default function InstitutesAndProgramsPage() {
     const categorizedInstitutes: Institute[] = Array.from(instituteMap.entries()).map(([name, programSet]) => {
       let category: Institute['category'] = "Other";
       const upperName = name.toUpperCase();
-      
+
       if (upperName.includes("NATIONAL INSTITUTE OF TECHNOLOGY") || upperName.startsWith("NIT ")) {
         category = "NIT";
       } else if (upperName.includes("INDIAN INSTITUTE OF INFORMATION TECHNOLOGY") || upperName.includes("(IIIT)")) {
@@ -94,7 +86,7 @@ export default function InstitutesAndProgramsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="container mx-auto px-4 py-8 sm:px-6 lg:py-16">
-        <HeroSection 
+        <HeroSection
           title={<>Institutions & <span className="text-primary">Programs</span></>}
           description={<>Discover and explore all participating <span className="text-on-surface font-bold">NITs, IIITs, and GFTIs</span>. Browse by institute category or search by specific academic programs.</>}
           hideInfoBox={true}
@@ -107,8 +99,8 @@ export default function InstitutesAndProgramsPage() {
               onClick={() => setActiveTab('institutes')}
               className={cn(
                 "flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300",
-                activeTab === 'institutes' 
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]" 
+                activeTab === 'institutes'
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
                   : "text-on-surface-variant hover:text-primary hover:bg-primary/5"
               )}
             >
@@ -119,8 +111,8 @@ export default function InstitutesAndProgramsPage() {
               onClick={() => setActiveTab('programs')}
               className={cn(
                 "flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300",
-                activeTab === 'programs' 
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]" 
+                activeTab === 'programs'
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
                   : "text-on-surface-variant hover:text-primary hover:bg-primary/5"
               )}
             >
@@ -131,7 +123,7 @@ export default function InstitutesAndProgramsPage() {
 
           <div className="relative w-full md:max-w-md group">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 size-5 text-on-surface-variant group-focus-within:text-primary transition-colors pointer-events-none" />
-            <input 
+            <input
               type="text"
               placeholder={`Search ${activeTab === 'institutes' ? 'institutions' : 'programs'}...`}
               value={searchQuery}

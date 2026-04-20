@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Program } from '@/app/institutes_and_programs/page';
-import { ProgramCard } from './ProgramCard';
+import { Program } from '@/lib/types';
+import { ProgramCard } from '@/components/institutes-and-programs/ProgramCard';
 import { motion } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
 
@@ -35,13 +35,13 @@ export function ProgramsTab({ programs, searchQuery }: ProgramsTabProps) {
   return (
     <div className="space-y-8">
       <div className="md:hidden mb-4">
-        <p className="text-xs font-black uppercase tracking-widest text-primary/60 px-1">Browse academic programs</p>
+        <p className="text-xs font-extrabold uppercase tracking-widest text-primary/60 px-1">Browse academic programs</p>
       </div>
 
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <div className="h-8 w-1.5 rounded-full bg-primary" />
-          <h2 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2">
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
             Available Programs
             <span className="text-sm font-medium text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-md">
               {filteredPrograms.length}

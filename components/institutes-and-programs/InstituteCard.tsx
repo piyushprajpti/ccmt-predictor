@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Institute } from '@/app/institutes_and_programs/page';
+import { Institute } from '@/lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, GraduationCap, Building2, MapPin, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -15,12 +15,12 @@ export function InstituteCard({ institute }: InstituteCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div 
+    <div
       onClick={() => setIsExpanded(!isExpanded)}
       className={cn(
         "group relative overflow-hidden rounded-3xl border transition-all duration-500 cursor-pointer",
-        isExpanded 
-          ? "bg-surface-container-lowest border-primary/30 shadow-2xl shadow-primary/10" 
+        isExpanded
+          ? "bg-surface-container-lowest border-primary/30 shadow-2xl shadow-primary/10"
           : "bg-surface-container-low/50 border-outline-variant/20 hover:border-primary/20 hover:bg-surface-container-lowest hover:shadow-xl"
       )}
     >
@@ -37,8 +37,8 @@ export function InstituteCard({ institute }: InstituteCardProps) {
               <span className={cn(
                 "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border",
                 institute.category === "NIT" ? "bg-primary/10 text-primary border-primary/20" :
-                institute.category === "IIIT" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
-                "bg-green-500/10 text-green-600 border-green-500/20"
+                  institute.category === "IIIT" ? "bg-blue-500/10 text-blue-600 border-blue-500/20" :
+                    "bg-green-500/10 text-green-600 border-green-500/20"
               )}>
                 {institute.category}
               </span>
@@ -47,11 +47,11 @@ export function InstituteCard({ institute }: InstituteCardProps) {
               {institute.name}
             </h3>
           </div>
-          <div 
+          <div
             className={cn(
               "size-10 rounded-2xl flex items-center justify-center transition-all duration-300 shrink-0",
-              isExpanded 
-                ? "bg-primary text-primary-foreground rotate-180" 
+              isExpanded
+                ? "bg-primary text-primary-foreground rotate-180"
                 : "bg-surface-container text-on-surface-variant hover:bg-primary/10 hover:text-primary"
             )}
           >
@@ -94,7 +94,7 @@ export function InstituteCard({ institute }: InstituteCardProps) {
                 <h4 className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant/70">Offered Programs</h4>
                 <div className="grid grid-cols-1 gap-2">
                   {institute.programs.map((program, idx) => (
-                    <motion.div 
+                    <motion.div
                       key={idx}
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}

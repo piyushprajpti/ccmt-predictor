@@ -25,22 +25,58 @@ export function Topbar() {
   const [isVisible, setIsVisible] = React.useState(true);
   const { scrollY } = useScroll();
   const cardRef = React.useRef<HTMLDivElement>(null);
+  const lastScrollYRef = React.useRef(0);
+  const isVisibleRef = React.useRef(true);
+  
+  // Use refs to avoid stale closures in scroll event
+  const isMobileMenuOpenRef = React.useRef(false);
+  const isCcmtCardOpenRef = React.useRef(false);
+  
+  // Keep refs in sync with state
+  React.useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
+  }, [isMobileMenuOpen]);
+  
+  React.useEffect(() => {
+    isCcmtCardOpenRef.current = isCcmtCardOpen;
+  }, [isCcmtCardOpen]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    
-    if (isMobileMenuOpen) {
-      setIsVisible(true);
+    const previous = lastScrollYRef.current;
+    lastScrollYRef.current = latest;
+
+    // If mobile menu is open, always keep topbar visible
+    if (isMobileMenuOpenRef.current) {
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
       return;
     }
 
-    if (latest < 50) {
-      setIsVisible(true);
-    } else if (latest > previous && latest > 100) {
-      setIsVisible(false);
-      setIsCcmtCardOpen(false);
-    } else if (latest < previous) {
-      setIsVisible(true);
+    let shouldBeVisible = true; // Default to visible
+
+    // Always show at top of page
+    if (latest < 20) {
+      shouldBeVisible = true;
+    }
+    // Hide when scrolling down past threshold
+    else if (latest > previous && latest > 30) {
+      shouldBeVisible = false;
+      // Close card when hiding
+      if (isCcmtCardOpenRef.current) {
+        setIsCcmtCardOpen(false);
+      }
+    }
+    // Show when scrolling up (this should always take priority)
+    else if (latest < previous) {
+      shouldBeVisible = true;
+    }
+
+    // Only update state if visibility actually changed
+    if (shouldBeVisible !== isVisibleRef.current) {
+      isVisibleRef.current = shouldBeVisible;
+      setIsVisible(shouldBeVisible);
     }
   });
 
@@ -60,6 +96,10 @@ export function Topbar() {
   // Reset topbar visibility and mobile menu on route change
   React.useEffect(() => {
     setIsVisible(true);
+    isVisibleRef.current = true;
+    lastScrollYRef.current = 0;
+    isMobileMenuOpenRef.current = false;
+    isCcmtCardOpenRef.current = false;
     setIsMobileMenuOpen(false);
     setIsCcmtCardOpen(false);
   }, [pathname]);
@@ -68,8 +108,8 @@ export function Topbar() {
     <motion.header 
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -100 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="sticky top-0 z-50 w-full border-b border-outline-variant/10 bg-background/80 backdrop-blur-xl"
+      transition={{ duration: 0.15, ease: "easeInOut" }}
+      className="fixed top-0 left-0 right-0 z-50 w-full border-b border-outline-variant/10 bg-background/80 backdrop-blur-xl"
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Logo */}
