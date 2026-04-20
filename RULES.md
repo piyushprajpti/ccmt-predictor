@@ -7,6 +7,9 @@
 ## 2. Code Quality & Performance
 - All code must meet high industry standards: scalable, readable, maintainable, and resilient to bugs or crashes.
 - Optimization is mandatory. Ensure application performance is never compromised.
+- Cover all the edge cases and handle them gracefully.
+- Use proper error handling and display user-friendly error messages.
+- Ensure proper loading states and skeleton screens for better user experience.
 
 ## 3. Design System & Aesthetics
 - **Colors**: Always use tokens from [globals.css](app/globals.css). Never hardcode color values.

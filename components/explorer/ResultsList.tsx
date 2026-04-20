@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
+import { CustomSelect } from '@/components/ui/custom-select';
+
 interface ResultItem {
   year: number;
   round: string;
@@ -29,12 +31,22 @@ interface ResultsListProps {
     categories: string[];
   };
   onRemoveFilter: (key: string, value: string) => void;
+  clearFilters: () => void;
   onClearFilters: () => void;
   selectedYear: string;
   setSelectedYear: (year: string) => void;
 }
 
 const ITEMS_PER_PAGE = 20;
+
+const SORT_OPTIONS = [
+  { id: 'max-desc', label: 'Max Score ↓' },
+  { id: 'max-asc', label: 'Max Score ↑' },
+  { id: 'min-desc', label: 'Min Score ↓' },
+  { id: 'min-asc', label: 'Min Score ↑' },
+  { id: 'inst-asc', label: 'Institution' },
+  { id: 'prog-asc', label: 'Program' },
+];
 
 export function ResultsList({
   results,
@@ -47,25 +59,7 @@ export function ResultsList({
   selectedYear,
   setSelectedYear,
 }: ResultsListProps) {
-  const [isYearDropdownOpen, setIsYearDropdownOpen] = React.useState(false);
-  const [isSortDropdownOpen, setIsSortDropdownOpen] = React.useState(false);
   const [sortBy, setSortBy] = React.useState<string>("max-desc");
-
-  const yearDropdownRef = React.useRef<HTMLDivElement>(null);
-  const sortDropdownRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target as Node)) {
-        setIsYearDropdownOpen(false);
-      }
-      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
-        setIsSortDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const sortedResults = React.useMemo(() => {
     const sorted = [...results];
@@ -123,97 +117,25 @@ export function ResultsList({
         <p className="text-sm sm:text-base text-on-surface font-medium text-center sm:text-left">
           Showing <span className="font-bold text-primary">{Math.min(startIndex + 1, totalCount)}-{Math.min(startIndex + ITEMS_PER_PAGE, totalCount)}</span> of <span className="font-bold text-primary">{totalCount.toLocaleString()}</span> programs
         </p>
-        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
-          <div className="relative" ref={yearDropdownRef}>
-            <button
-              onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/40 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-high"
-            >
-              <Calendar className="size-3.5 sm:size-4 text-primary" />
-              <span>Year: {selectedYear}</span>
-              <ChevronDown className={cn("size-3.5 sm:size-4 text-on-surface-variant transition-transform duration-300", isYearDropdownOpen && "rotate-180")} />
-            </button>
-
-            <AnimatePresence>
-              {isYearDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 4, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 top-full z-50 mt-1 min-w-[140px] overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-1.5 shadow-2xl shadow-primary/5 backdrop-blur-xl"
-                >
-                  {['2025', '2024', '2023', '2022', '2021'].map((year) => (
-                    <button
-                      key={year}
-                      onClick={() => {
-                        setSelectedYear(year);
-                        setIsYearDropdownOpen(false);
-                      }}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition-all",
-                        selectedYear === year
-                          ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                          : "text-on-surface hover:bg-surface-container-low hover:text-primary"
-                      )}
-                    >
-                      {year}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+        <div className="grid grid-cols-1 sm:flex sm:items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
+            <Calendar className="size-4 text-primary shrink-0" />
+            <CustomSelect
+              value={selectedYear}
+              onChange={setSelectedYear}
+              options={['2025', '2024', '2023', '2022', '2021']}
+              className="w-28"
+            />
           </div>
 
-          <div className="relative" ref={sortDropdownRef}>
-            <button
-              onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 sm:px-4 h-10 text-xs sm:text-sm font-bold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer shadow-sm hover:bg-surface-container-low"
-            >
-              <ListFilter className="size-3.5 sm:size-4 text-primary" />
-              <span className="truncate">Sort: {getSortLabel(sortBy)}</span>
-              <ChevronDown className={cn("size-3.5 sm:size-4 text-on-surface-variant transition-transform duration-300", isSortDropdownOpen && "rotate-180")} />
-            </button>
-
-            <AnimatePresence>
-              {isSortDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 4, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 top-full z-50 mt-1 min-w-[200px] overflow-hidden rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-1.5 shadow-2xl shadow-primary/5 backdrop-blur-xl"
-                >
-                  <div className="px-3 py-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Sort By</div>
-                  {[
-                    { id: 'max-desc', label: 'Max Score (High to Low)', icon: <ArrowDownWideNarrow className="size-4" /> },
-                    { id: 'max-asc', label: 'Max Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
-                    { id: 'min-desc', label: 'Min Score (High to Low)', icon: <ArrowDownWideNarrow className="size-4" /> },
-                    { id: 'min-asc', label: 'Min Score (Low to High)', icon: <ArrowUpNarrowWide className="size-4" /> },
-                    { id: 'inst-asc', label: 'Institution (A-Z)', icon: <SortAsc className="size-4" /> },
-                    { id: 'prog-asc', label: 'Program (A-Z)', icon: <SortAsc className="size-4" /> },
-                  ].map((option) => (
-                    <button
-                      key={option.id}
-                      onClick={() => {
-                        setSortBy(option.id);
-                        setIsSortDropdownOpen(false);
-                        setCurrentPage(1);
-                      }}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold transition-all",
-                        sortBy === option.id
-                          ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                          : "text-on-surface hover:bg-surface-container-low hover:text-primary"
-                      )}
-                    >
-                      {option.icon}
-                      {option.label}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="flex items-center gap-2">
+            <ListFilter className="size-4 text-primary shrink-0" />
+            <CustomSelect
+              value={SORT_OPTIONS.find(o => o.id === sortBy)?.label || "Sort"}
+              onChange={(label) => setSortBy(SORT_OPTIONS.find(o => o.label === label)?.id || "max-desc")}
+              options={SORT_OPTIONS.map(o => o.label)}
+              className="w-44"
+            />
           </div>
         </div>
       </div>

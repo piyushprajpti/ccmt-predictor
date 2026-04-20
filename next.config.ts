@@ -4,9 +4,8 @@ const nextConfig: NextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-  }
+  },
+  allowedDevOrigins: ['192.168.1.*', 'localhost:3000'],
 };
-module.exports = {
-  allowedDevOrigins: ['192.168.1.*'],
-}
+
 export default nextConfig;
