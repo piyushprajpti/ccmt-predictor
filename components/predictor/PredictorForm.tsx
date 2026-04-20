@@ -39,13 +39,17 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
   const [category, setCategory] = useState("OPEN");
   const [year, setYear] = useState("2025");
   const [entries, setEntries] = useState<PaperEntry[]>([
-    { id: Math.random().toString(), code: "CS", score: "" }
+    { id: crypto.randomUUID(), code: "CS", score: "" }
   ]);
   const [error, setError] = useState<string | null>(null);
 
   const addEntry = () => {
     setError(null);
-    setEntries([...entries, { id: Math.random().toString(), code: "CS", score: "" }]);
+    if (entries.length >= 4) {
+      setError("Maximum 4 papers allowed");
+      return;
+    }
+    setEntries([...entries, { id: crypto.randomUUID(), code: "CS", score: "" }]);
   };
 
   const removeEntry = (id: string) => {
@@ -62,24 +66,30 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate we have at least one entry
+    if (entries.length === 0) {
+      setError("Please add at least one GATE paper score");
+      return;
+    }
+    
     // Check for out-of-range scores first
-    const hasOutOfRange = entries.some(e => {
+    const invalidScores = entries.filter(e => {
       if (!e.score) return false;
-      const val = Number(e.score);
-      return val < 0 || val > 1000;
+      const val = parseFloat(e.score);
+      return isNaN(val) || val < 0 || val > 1000;
     });
 
-    if (hasOutOfRange) {
-      setError("GATE scores must be between 0 and 1000.");
+    if (invalidScores.length > 0) {
+      setError("All GATE scores must be valid numbers between 0 and 1000");
       return;
     }
 
     const validEntries = entries
-      .filter(e => e.score && !isNaN(Number(e.score)) && Number(e.score) >= 0 && Number(e.score) <= 1000)
-      .map(e => ({ code: e.code, score: Number(e.score) }));
+      .filter(e => e.score && !isNaN(parseFloat(e.score)))
+      .map(e => ({ code: e.code, score: parseFloat(e.score) }));
     
     if (validEntries.length === 0) {
-      setError("Please enter at least one valid GATE score.");
+      setError("Please enter at least one valid GATE score");
       return;
     }
 
@@ -108,20 +118,22 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
         <div className="border-b border-outline-variant/10 py-6 first:pt-0">
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Predict for Year</label>
+              <label htmlFor="year-select" className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Predict for Year</label>
               <CustomSelect
                 value={year}
                 onChange={setYear}
                 options={YEARS}
+                aria-label="Select year for prediction"
               />
             </div>
 
             <div className="space-y-3">
-              <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Your Category</label>
+              <label htmlFor="category-select" className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1">Your Category</label>
               <CustomSelect
                 value={category}
                 onChange={setCategory}
                 options={CATEGORIES}
+                aria-label="Select your category"
               />
             </div>
           </div>
@@ -130,7 +142,10 @@ export function PredictorForm({ onPredict, isLoading }: PredictorFormProps) {
         {/* Paper Entries Section */}
         <div className="border-b border-outline-variant/10 py-6">
           <label className="text-[11px] font-black text-on-surface-variant uppercase tracking-[0.2em] ml-1 block mb-4">GATE Paper(s) & Scores</label>
-          <div className="space-y-4">
+          <div className="space-y-4"
+            role="list"
+            aria-label="GATE paper entries"
+          >
             <AnimatePresence mode="popLayout">
               {entries.map((entry, index) => (
                 <motion.div

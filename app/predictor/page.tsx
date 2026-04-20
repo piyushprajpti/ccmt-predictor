@@ -10,6 +10,8 @@ import { BarChart3, Sparkles, ArrowRight } from "lucide-react";
 import { checkEligibility } from "@/lib/eligibility";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { fetchJsonData, validateCCMTData } from "@/lib/data-handlers";
+import { AlertCircle } from "lucide-react";
 
 export default function PredictorPage() {
   const [data, setData] = useState<any[]>([]);
@@ -20,6 +22,7 @@ export default function PredictorPage() {
   const [userScores, setUserScores] = useState<{ code: string; score: number }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState("2025");
+  const [predictionError, setPredictionError] = useState<string | null>(null);
 
   // Logic to handle prediction
   const handlePredict = async (predictionParams: {
@@ -28,16 +31,30 @@ export default function PredictorPage() {
     year: string;
   }) => {
     setIsPredicting(true);
+    setPredictionError(null);
     setSelectedYear(predictionParams.year);
     setCategory(predictionParams.category);
     setUserScores(predictionParams.entries);
 
     try {
       // Load data for the selected year
-      const response = await fetch(`/ccmt_${predictionParams.year}.json`);
-      if (!response.ok) throw new Error("Failed to load data");
-      const jsonData = await response.json();
+      const result = await fetchJsonData(`/ccmt_${predictionParams.year}.json`);
+      
+      if (result.error) {
+        setPredictionError(result.error);
+        setResults([]);
+        setHasPredicted(false);
+        return;
+      }
 
+      if (!result.data) {
+        setPredictionError('No data received from server');
+        setResults([]);
+        setHasPredicted(false);
+        return;
+      }
+
+      const jsonData = result.data;
       const filtered = jsonData.filter((item: any) => {
         // 1. Match category
         if (item.category !== predictionParams.category) return false;
@@ -56,6 +73,12 @@ export default function PredictorPage() {
         return item.closingRank <= maxEligibleScore;
       });
 
+      if (filtered.length === 0) {
+        setPredictionError('No colleges found matching your criteria. Try adjusting your scores or category.');
+      } else {
+        setPredictionError(null);
+      }
+
       setResults(filtered);
       setHasPredicted(true);
 
@@ -65,8 +88,11 @@ export default function PredictorPage() {
       }, 100);
 
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setPredictionError(`Prediction failed: ${errorMessage}`);
+      setResults([]);
+      setHasPredicted(false);
       console.error("Prediction error:", error);
-      alert("Error loading data for prediction. Please try again.");
     } finally {
       setIsPredicting(false);
     }
@@ -89,7 +115,29 @@ export default function PredictorPage() {
           {/* Right Side: Results or Placeholder */}
           <div className="flex-1 min-w-0 max-w-full" id="results-section">
             <AnimatePresence mode="wait">
-              {hasPredicted ? (
+              {predictionError && !hasPredicted && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-center justify-center pt-20 min-h-[400px] border-2 border-destructive/20 rounded-[3rem] p-8 text-center bg-destructive/5"
+                >
+                  <div className="size-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+                    <AlertCircle className="size-8 text-destructive" />
+                  </div>
+                  <h2 className="text-xl font-bold text-destructive mb-2">Prediction Failed</h2>
+                  <p className="text-on-surface-variant max-w-sm mb-6">{predictionError}</p>
+                  <Button 
+                    onClick={() => setHasPredicted(false)} 
+                    variant="secondary"
+                    className="border border-outline-variant/20"
+                  >
+                    Try Again
+                  </Button>
+                </motion.div>
+              )}
+              {hasPredicted && !predictionError ? (
                 <motion.div
                   key="results"
                   initial={{ opacity: 0, y: 20 }}
@@ -103,7 +151,7 @@ export default function PredictorPage() {
                     category={category}
                   />
                 </motion.div>
-              ) : (
+              ) : !hasPredicted ? (
                 <motion.div
                   key="placeholder"
                   initial={{ opacity: 0 }}
@@ -118,7 +166,7 @@ export default function PredictorPage() {
                     Enter your GATE scores and category in the form to see your eligible colleges and programs.
                   </p>
                 </motion.div>
-              )}
+              ) : null}
             </AnimatePresence>
           </div>
         </div>

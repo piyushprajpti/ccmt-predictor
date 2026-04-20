@@ -4,29 +4,40 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { HeroSection } from '@/components/shared/HeroSection';
 import { LoadingScreen } from '@/components/ui/loading-screen';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, School, GraduationCap, LayoutGrid, List } from 'lucide-react';
+import { Search, School, GraduationCap, LayoutGrid, List, AlertCircle } from 'lucide-react';
 import { InstitutesTab } from '@/components/institutes-and-programs/InstitutesTab';
 import { ProgramsTab } from '@/components/institutes-and-programs/ProgramsTab';
 import { cn } from '@/lib/utils';
 import { Institute, Program } from '@/lib/types';
+import { fetchJsonData, validateCCMTData } from '@/lib/data-handlers';
+import { Button } from '@/components/ui/button';
 
 
 
 export default function InstitutesAndProgramsPage() {
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'institutes' | 'programs'>('institutes');
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/ccmt_2025.json');
-        if (!response.ok) throw new Error('Failed to fetch 2025 data');
-        const jsonData = await response.json();
-        setData(jsonData);
+        const result = await fetchJsonData('/ccmt_2025.json');
+        if (result.error) {
+          setError(result.error);
+          setData([]);
+        } else if (result.data) {
+          setData(result.data);
+          setError(null);
+        } else {
+          setError('No data received');
+          setData([]);
+        }
       } catch (err) {
-        console.error("Error loading data:", err);
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+        setData([]);
       } finally {
         setIsLoading(false);
       }
@@ -82,6 +93,40 @@ export default function InstitutesAndProgramsPage() {
   }, [data]);
 
   if (isLoading) return <LoadingScreen />;
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
+        <div className="max-w-md w-full">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-3xl p-8 text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="size-16 rounded-full bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+                <AlertCircle className="size-8 text-destructive" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-2">Unable to Load Institutions</h2>
+              <p className="text-sm text-on-surface-variant leading-relaxed">{error}</p>
+            </div>
+            <div className="flex gap-3 justify-center pt-4">
+              <Button
+                onClick={() => window.location.reload()}
+                className="bg-primary text-primary-foreground"
+              >
+                Retry
+              </Button>
+              <Button
+                onClick={() => window.history.back()}
+                variant="outline"
+              >
+                Go Back
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">

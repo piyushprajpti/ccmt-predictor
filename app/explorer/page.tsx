@@ -5,6 +5,9 @@ import { FilterSidebar } from '@/components/explorer/FilterSidebar';
 import { ResultsList } from '@/components/explorer/ResultsList';
 import { LoadingScreen } from '@/components/ui/loading-screen';
 import { HeroSection } from '@/components/shared/HeroSection';
+import { fetchJsonData, validateCCMTData } from '@/lib/data-handlers';
+import { AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function ExplorerPage() {
   const [data, setData] = useState<any[]>([]);
@@ -19,21 +22,28 @@ export default function ExplorerPage() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-
   const [selectedYear, setSelectedYear] = useState("2025");
 
-  // Load data
+  // Load data with error handling
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
+      setError(null);
       try {
-        const response = await fetch(`/ccmt_${selectedYear}.json`);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const jsonData = await response.json();
-        setData(jsonData);
-        setError(null);
+        const result = await fetchJsonData(`/ccmt_${selectedYear}.json`);
+        if (result.error) {
+          setError(result.error);
+          setData([]);
+        } else if (result.data) {
+          setData(result.data);
+          setError(null);
+        } else {
+          setError('No data received');
+          setData([]);
+        }
       } catch (err: any) {
-        setError(err.message);
+        setError(err.message || 'Unexpected error loading data');
+        setData([]);
       } finally {
         setIsLoading(false);
       }
@@ -104,16 +114,33 @@ export default function ExplorerPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-6 text-center">
-        <div className="max-w-md bg-destructive/10 p-8 rounded-3xl border border-destructive/20">
-          <h2 className="text-xl font-bold text-destructive">Error Loading Data</h2>
-          <p className="mt-2 text-on-surface-variant">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-xl font-bold"
-          >
-            Retry
-          </button>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
+        <div className="max-w-md w-full">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-3xl p-8 text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="size-16 rounded-full bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+                <AlertCircle className="size-8 text-destructive" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-2">Unable to Load Data</h2>
+              <p className="text-sm text-on-surface-variant leading-relaxed">{error}</p>
+            </div>
+            <div className="flex gap-3 justify-center pt-4">
+              <Button
+                onClick={() => window.location.reload()}
+                className="bg-primary text-primary-foreground"
+              >
+                Retry
+              </Button>
+              <Button
+                onClick={() => window.history.back()}
+                variant="outline"
+              >
+                Go Back
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     );

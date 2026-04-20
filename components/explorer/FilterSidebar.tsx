@@ -5,6 +5,7 @@ import { ChevronDown, Search, X, RotateCcw, Filter, Building2, BookOpen, Users, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { sanitizeSearchInput } from '@/lib/data-handlers';
 
 interface FilterSidebarProps {
   filters: {
@@ -118,7 +119,8 @@ function FilterSection({ title, icon, items, selectedItems, onToggle, showSearch
 
   const filteredItems = useMemo(() => {
     if (!search) return items;
-    return items.filter(item => item.toLowerCase().includes(search.toLowerCase()));
+    const sanitized = sanitizeSearchInput(search);
+    return items.filter(item => item.toLowerCase().includes(sanitized.toLowerCase()));
   }, [items, search]);
 
   return (
