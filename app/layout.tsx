@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
+import JsonLd from "@/components/json-ld";
+import GoogleAnalytics from "@/components/google-analytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,10 +14,78 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ccmtcollegefinder.web.app";
+const siteUrl = new URL(SITE_URL);
+
 export const metadata: Metadata = {
-  title: "CCMT College Finder | NIT/IIIT Predictor",
+  metadataBase: siteUrl,
+  title: {
+    default: "CCMT College Finder & Predictor | GATE Cutoff Analysis for NIT, IIIT, GFTI",
+    template: "%s | CCMT College Finder",
+  },
   description:
-    "An editorial-grade academic portal for reviewing predictive signals with clarity and depth.",
+    "Explore CCMT cutoffs (2021-2025), predict colleges using your GATE score, and build smarter CCMT preference lists for NITs, IIITs, and GFTIs.",
+  keywords: [
+    "CCMT college predictor",
+    "CCMT college finder",
+    "CCMT cutoff predictor",
+    "GATE college predictor CCMT",
+    "CCMT preference filling",
+    "CCMT counseling predictor",
+    "NIT IIIT GFTI predictor",
+    "CCMT cutoff trends",
+    "CCMT cutoff 2025",
+    "GATE score college prediction",
+  ],
+  authors: [{ name: "CCMT College Finder" }],
+  creator: "CCMT College Finder",
+  publisher: "CCMT College Finder",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl.toString(),
+    title: "CCMT College Finder & Predictor | GATE Cutoff Analysis for NIT, IIIT, GFTI",
+    description:
+      "Explore CCMT cutoffs (2021-2025), predict colleges using your GATE score, and build smarter CCMT preference lists for NITs, IIITs, and GFTIs.",
+    siteName: "CCMT College Finder",
+    images: [
+      {
+        url: "/ccmt_logo.png",
+        width: 1200,
+        height: 630,
+        alt: "CCMT College Finder",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CCMT College Finder & Predictor",
+    description:
+      "Analyze CCMT cutoffs and predict colleges for NIT, IIIT, and GFTI admissions.",
+    images: ["/ccmt_logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/ccmt_logo.png",
     shortcut: "/ccmt_logo.png",
@@ -63,6 +133,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <JsonLd />
         <NavigationProvider>
           <Topbar />
           <PageTransition>
@@ -70,6 +141,7 @@ export default function RootLayout({
           </PageTransition>
           <Footer />
         </NavigationProvider>
+        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ""} />
       </body>
     </html>
   );
