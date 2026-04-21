@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import BreadcrumbJsonLd from "@/components/seo/breadcrumb-json-ld";
+import InstitutesProgramsJsonLd from "@/components/seo/institutes-programs-json-ld";
 
 export const metadata: Metadata = {
   title: "CCMT Institutes & Programs | NIT, IIIT, GFTI Program Directory",
@@ -23,13 +25,20 @@ export const metadata: Metadata = {
     description:
       "Explore participating NITs, IIITs, and GFTIs with available programs in CCMT counseling.",
     url: "/institutes_and_programs",
-    images: ["/ccmt_logo.png"],
+    images: [
+      {
+        url: "/og/institutes-programs-og.png",
+        width: 1200,
+        height: 630,
+        alt: "CCMT Institutes and Programs",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "CCMT Institutes & Programs Directory",
     description: "Browse CCMT participating institutes and MTech programs.",
-    images: ["/ccmt_logo.png"],
+    images: ["/og/institutes-programs-og.png"],
   },
 };
 
@@ -38,5 +47,16 @@ export default function InstitutesAndProgramsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Institutes & Programs", path: "/institutes_and_programs" },
+        ]}
+      />
+      <InstitutesProgramsJsonLd />
+      {children}
+    </>
+  );
 }

@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     siteName: "CCMT College Finder",
     images: [
       {
-        url: "/ccmt_logo.png",
+        url: "/og/home-og.png",
         width: 1200,
         height: 630,
         alt: "CCMT College Finder",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     title: "CCMT College Finder & Predictor",
     description:
       "Analyze CCMT cutoffs and predict colleges for NIT, IIIT, and GFTI admissions.",
-    images: ["/ccmt_logo.png"],
+    images: ["/og/home-og.png"],
   },
   robots: {
     index: true,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BreadcrumbJsonLd from "@/components/seo/breadcrumb-json-ld";
 
 export const metadata: Metadata = {
   title: "CCMT Cutoff Explorer (2021-2025) | Institute & Program Wise Trends",
@@ -25,16 +26,33 @@ export const metadata: Metadata = {
     description:
       "Explore year-wise, round-wise, and category-wise CCMT cutoffs for NITs, IIITs, and GFTIs.",
     url: "/explorer",
-    images: ["/ccmt_logo.png"],
+    images: [
+      {
+        url: "/og/explorer-og.png",
+        width: 1200,
+        height: 630,
+        alt: "CCMT Cutoff Explorer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "CCMT Cutoff Explorer (2021-2025)",
     description: "Explore year-wise and category-wise CCMT cutoff trends.",
-    images: ["/ccmt_logo.png"],
+    images: ["/og/explorer-og.png"],
   },
 };
 
 export default function ExplorerLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Explorer", path: "/explorer" },
+        ]}
+      />
+      {children}
+    </>
+  );
 }

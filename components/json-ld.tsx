@@ -17,6 +17,11 @@ type StructuredData = {
       };
     }>;
   };
+  potentialAction: {
+    "@type": string;
+    target: string;
+    "query-input": string;
+  };
 };
 
 export default function JsonLd() {
@@ -42,6 +47,11 @@ export default function JsonLd() {
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "CCMT College Predictor" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "Institutes and Programs Directory" } },
       ],
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/explorer?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
     },
   };
 
