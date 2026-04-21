@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useMotionValue, useTransform } from "framer-motion";
 import { ChevronDown, ExternalLink, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,21 +22,22 @@ export function Topbar() {
   const pathname = usePathname();
   const [isCcmtCardOpen, setIsCcmtCardOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(true);
   const { scrollY } = useScroll();
   const cardRef = React.useRef<HTMLDivElement>(null);
   const lastScrollYRef = React.useRef(0);
-  const isVisibleRef = React.useRef(true);
-  
+
   // Use refs to avoid stale closures in scroll event
   const isMobileMenuOpenRef = React.useRef(false);
   const isCcmtCardOpenRef = React.useRef(false);
-  
+
+  // MotionValue-driven y: bypasses React renders entirely — no forced reflow
+  const headerY = useMotionValue(0);
+
   // Keep refs in sync with state
   React.useEffect(() => {
     isMobileMenuOpenRef.current = isMobileMenuOpen;
   }, [isMobileMenuOpen]);
-  
+
   React.useEffect(() => {
     isCcmtCardOpenRef.current = isCcmtCardOpen;
   }, [isCcmtCardOpen]);
@@ -47,36 +48,25 @@ export function Topbar() {
 
     // If mobile menu is open, always keep topbar visible
     if (isMobileMenuOpenRef.current) {
-      if (!isVisibleRef.current) {
-        isVisibleRef.current = true;
-        setIsVisible(true);
-      }
+      headerY.set(0);
       return;
     }
 
-    let shouldBeVisible = true; // Default to visible
-
     // Always show at top of page
     if (latest < 20) {
-      shouldBeVisible = true;
+      headerY.set(0);
     }
     // Hide when scrolling down past threshold
     else if (latest > previous && latest > 30) {
-      shouldBeVisible = false;
-      // Close card when hiding
+      headerY.set(-100);
+      // Close card when hiding (state update — intentional, not scroll-driven)
       if (isCcmtCardOpenRef.current) {
         setIsCcmtCardOpen(false);
       }
     }
-    // Show when scrolling up (this should always take priority)
+    // Show when scrolling up
     else if (latest < previous) {
-      shouldBeVisible = true;
-    }
-
-    // Only update state if visibility actually changed
-    if (shouldBeVisible !== isVisibleRef.current) {
-      isVisibleRef.current = shouldBeVisible;
-      setIsVisible(shouldBeVisible);
+      headerY.set(0);
     }
   });
 
@@ -93,21 +83,19 @@ export function Topbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Reset topbar visibility and mobile menu on route change
+  // Reset topbar on route change
   React.useEffect(() => {
-    setIsVisible(true);
-    isVisibleRef.current = true;
+    headerY.set(0);
     lastScrollYRef.current = 0;
     isMobileMenuOpenRef.current = false;
     isCcmtCardOpenRef.current = false;
     setIsMobileMenuOpen(false);
     setIsCcmtCardOpen(false);
-  }, [pathname]);
+  }, [pathname, headerY]);
 
   return (
-    <motion.header 
-      initial={{ y: 0 }}
-      animate={{ y: isVisible ? 0 : -100 }}
+    <motion.header
+      style={{ y: headerY }}
       transition={{ duration: 0.15, ease: "easeInOut" }}
       className="fixed top-0 left-0 right-0 z-50 w-full border-b border-outline-variant/10 bg-background/80 backdrop-blur-xl"
     >
@@ -115,9 +103,9 @@ export function Topbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative size-10 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-            <Image 
-              src="/ccmt_logo.png" 
-              alt="CCMT Logo" 
+            <Image
+              src="/ccmt_logo.webp"
+              alt="CCMT Logo"
               fill
               className="object-contain"
             />
@@ -144,13 +132,12 @@ export function Topbar() {
               >
                 {tab.name}
               </motion.span>
-              {activeTab === tab.name && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full mx-2"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
+              <span
+                className={cn(
+                  "absolute bottom-0 left-2 right-2 h-0.5 bg-primary rounded-full transition-all duration-300 origin-center",
+                  activeTab === tab.name ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                )}
+              />
             </Link>
           ))}
         </nav>

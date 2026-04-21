@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     siteName: "CCMT College Finder",
     images: [
       {
-        url: "/og/home-og.png",
+        url: "/ccmt_logo.webp",
         width: 1200,
         height: 630,
         alt: "CCMT College Finder",
@@ -70,10 +70,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CCMT College Finder & Predictor",
-    description:
-      "Analyze CCMT cutoffs and predict colleges for NIT, IIIT, and GFTI admissions.",
-    images: ["/og/home-og.png"],
+    title: "CCMT College Finder 2025 | Best GATE Post-Graduation Tool",
+    description: "The most advanced predictor and explorer for CCMT 2025. Data-driven insights for NITs, IIITs and GFTIs.",
+    images: ["/ccmt_logo.webp"],
   },
   robots: {
     index: true,
@@ -87,16 +86,13 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/ccmt_logo.png",
-    shortcut: "/ccmt_logo.png",
-    apple: "/ccmt_logo.png",
+    icon: "/ccmt_logo.webp",
+    shortcut: "/ccmt_logo.webp",
+    apple: "/ccmt_logo.webp",
   },
 };
 
-import { Topbar } from "@/components/topbar";
-import { Footer } from "@/components/footer";
-import { PageTransition } from "@/components/page-transition";
-import { NavigationProvider } from "@/components/navigation-provider";
+import { ClientShell } from "@/components/client-shell";
 
 export default function RootLayout({
   children,
@@ -110,6 +106,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -134,13 +132,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <JsonLd />
-        <NavigationProvider>
-          <Topbar />
-          <PageTransition>
-            <main className="flex-1 pt-16">{children}</main>
-          </PageTransition>
-          <Footer />
-        </NavigationProvider>
+        <ClientShell>{children}</ClientShell>
         <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
       </body>
     </html>

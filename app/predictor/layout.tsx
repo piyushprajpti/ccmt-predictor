@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     url: "/predictor",
     images: [
       {
-        url: "/og/predictor-og.png",
+        url: "/ccmt_logo.webp",
         width: 1200,
         height: 630,
         alt: "CCMT College Predictor",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CCMT College Predictor by GATE Score",
     description: "Predict CCMT admission chances using your GATE score.",
-    images: ["/og/predictor-og.png"],
+    images: ["/ccmt_logo.webp"],
   },
 };
 

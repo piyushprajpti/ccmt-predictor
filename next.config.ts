@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   allowedDevOrigins: ['192.168.1.*', 'localhost:3000'],
+  productionBrowserSourceMaps: true,
 };
 
 export default nextConfig;
