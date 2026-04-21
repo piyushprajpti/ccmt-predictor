@@ -14,7 +14,7 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ccmtcollegefinder.web.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 const siteUrl = new URL(SITE_URL);
 
 export const metadata: Metadata = {
@@ -49,9 +49,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   verification: {
-    google:
-      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
-      "ZO7FTfgr-Wtjz-ZA84HLxA4cQgqYP53F8gTcb1ahz2s",
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION!,
   },
   openGraph: {
     type: "website",
@@ -143,7 +141,7 @@ export default function RootLayout({
           </PageTransition>
           <Footer />
         </NavigationProvider>
-        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ""} />
+        <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
       </body>
     </html>
   );

@@ -25,7 +25,7 @@ type StructuredData = {
 };
 
 export default function JsonLd() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ccmtcollegefinder.web.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 
   const schema: StructuredData = {
     "@context": "https://schema.org",
