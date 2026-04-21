@@ -67,13 +67,13 @@ export function Footer() {
   return (
     <footer className="relative mt-auto border-t border-outline-variant/30 bg-surface-container shadow-inner">
       <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-8">
           {/* Disclaimer Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 md:col-span-3 text-pretty"
           >
             <div className="flex items-center gap-2 text-primary">
               <ShieldAlert className="w-5 h-5 text-destructive" />
@@ -82,7 +82,7 @@ export function Footer() {
             <p className="text-on-surface-variant text-sm leading-relaxed">
               This platform is an <strong>unofficial, student-led project</strong>. 
               Not affiliated with CCMT or any government body. 
-              Cross-verify details with official documentation before making academic decisions.
+              Always refer to the official CCMT website for final and authoritative information.
             </p>
           </motion.div>
 
@@ -92,10 +92,10 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 md:col-span-3"
           >
             <h3 className="font-display font-bold text-lg tracking-tight text-foreground">Quick Shortcuts</h3>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 relative" ref={cardRef}>
+            <div className="flex flex-col gap-y-2 relative" ref={cardRef}>
               {TABS.map((tab) => (
                 <Link 
                   key={tab.name} 
@@ -110,7 +110,7 @@ export function Footer() {
               ))}
               <button 
                 onClick={() => setIsCcmtCardOpen(!isCcmtCardOpen)}
-                className="text-sm text-primary font-bold hover:text-primary/80 transition-colors flex items-center gap-1.5 text-left col-span-2 mt-1"
+                className="text-sm text-primary font-bold hover:text-primary/80 transition-colors flex items-center gap-1.5 text-left mt-1"
               >
                 Official CCMT Min Max Site 
                 <ChevronUp className={cn("size-3.5 transition-transform duration-300", isCcmtCardOpen && "rotate-180")} />
@@ -127,15 +127,20 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 md:col-span-6"
           >
             <div className="flex items-center gap-2 text-primary">
               <Briefcase className="w-5 h-5" />
               <h3 className="font-display font-bold text-lg tracking-tight">Developer</h3>
             </div>
-            <p className="text-on-surface-variant text-sm leading-relaxed">
-              Created by <strong>Piyush Prajapati</strong>. Focused on App Development and open to freelance projects.
-            </p>
+            <div className="flex flex-col gap-3">
+              <p className="text-on-surface-variant text-sm leading-relaxed">
+                Hi, I am <strong>Piyush Prajapati</strong>. I also gave GATE this year and am taking part in CCMT counseling. I built this website because checking cutoffs on different sites with confusing filters was really hard and time taking. I hope this makes things easier for you also!
+              </p>
+              <p className="text-on-surface-variant text-sm leading-relaxed">
+                I am a final year student and an app developer. I am looking for full-time jobs, referrals, or freelance projects. I would be very happy to connect if you have any leads!
+              </p>
+            </div>
             
             <div className="flex items-center gap-3 mt-3">
               <Link 
@@ -155,7 +160,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     className={cn(
-                      "p-1.5 rounded-lg bg-surface-container-low border border-outline-variant/20 transition-all duration-300 group hover:bg-surface-container hover:shadow-md text-on-surface-variant",
+                      "p-1.5 rounded-full overflow-hidden bg-surface-container-low border border-outline-variant/20 transition-all duration-300 group hover:bg-surface-container hover:shadow-md text-on-surface-variant",
                       link.color
                     )}
                     title={link.name}
@@ -165,7 +170,7 @@ export function Footer() {
                       alt={link.name} 
                       width={32} 
                       height={32} 
-                      className="object-contain"
+                      className="object-contain rounded-full"
                     />
                   </Link>
                 ))}
