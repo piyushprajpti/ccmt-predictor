@@ -17,6 +17,14 @@ const PageTransition = dynamic(
   { ssr: false }
 );
 
+const FloatingFeedback = dynamic(
+  () =>
+    import("@/components/floating-feedback").then((m) => ({
+      default: m.FloatingFeedback,
+    })),
+  { ssr: false }
+);
+
 export function ClientShell({ children }: { children: React.ReactNode }) {
   return (
     <NavigationProvider>
@@ -25,6 +33,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 pt-16">{children}</main>
       </PageTransition>
       <Footer />
+      <FloatingFeedback />
     </NavigationProvider>
   );
 }
