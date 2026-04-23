@@ -30,6 +30,22 @@ export default function Home() {
         </div>
 
         <div className="container mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-[2rem] border border-outline-variant/20 bg-surface-container/70 p-4 shadow-lg shadow-primary/10 backdrop-blur-md md:h-28 md:w-28"
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src="/ccmt_logo.png"
+                alt="CCMT Logo"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
