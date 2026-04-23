@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     url: "/institutes_and_programs",
     images: [
       {
-        url: "/ccmt_logo.webp",
+        url: "/ccmt_logo.png",
         width: 1200,
         height: 630,
         alt: "CCMT Institutes and Programs",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CCMT Institutes & Programs Directory",
     description: "Browse CCMT participating institutes and MTech programs.",
-    images: ["/ccmt_logo.webp"],
+    images: ["/ccmt_logo.png"],
   },
 };
 

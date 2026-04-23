@@ -104,7 +104,7 @@ export function Topbar() {
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative size-10 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
             <Image
-              src="/ccmt_logo.webp"
+              src="/ccmt_logo.png"
               alt="CCMT Logo"
               fill
               className="object-contain"

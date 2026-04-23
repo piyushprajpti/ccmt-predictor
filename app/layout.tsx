@@ -19,6 +19,7 @@ const siteUrl = new URL(SITE_URL);
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
+  applicationName: "CCMT College Finder",
   title: {
     default: "CCMT College Finder & Predictor | GATE Cutoff Analysis for NIT, IIIT, GFTI",
     template: "%s | CCMT College Finder",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     siteName: "CCMT College Finder",
     images: [
       {
-        url: "/ccmt_logo.webp",
+        url: "/ccmt_logo.png",
         width: 1200,
         height: 630,
         alt: "CCMT College Finder",
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CCMT College Finder 2025 | Best GATE Post-Graduation Tool",
     description: "The most advanced predictor and explorer for CCMT 2025. Data-driven insights for NITs, IIITs and GFTIs.",
-    images: ["/ccmt_logo.webp"],
+    images: ["/ccmt_logo.png"],
   },
   robots: {
     index: true,
@@ -86,9 +87,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/ccmt_logo.webp",
-    shortcut: "/ccmt_logo.webp",
-    apple: "/ccmt_logo.webp",
+    icon: "/ccmt_logo.png",
+    shortcut: "/ccmt_logo.png",
+    apple: "/ccmt_logo.png",
   },
 };
 

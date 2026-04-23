@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     url: "/explorer",
     images: [
       {
-        url: "/ccmt_logo.webp",
+        url: "/ccmt_logo.png",
         width: 1200,
         height: 630,
         alt: "CCMT Cutoff Explorer",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CCMT Cutoff Explorer (2021-2025)",
     description: "Explore year-wise and category-wise CCMT cutoff trends.",
-    images: ["/ccmt_logo.webp"],
+    images: ["/ccmt_logo.png"],
   },
 };
 

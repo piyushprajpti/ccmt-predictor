@@ -311,7 +311,7 @@ export function Footer() {
         <div className="mt-10 pt-6 border-t border-outline-variant/20 flex flex-col md:flex-row justify-center items-center gap-4">
           <div className="relative size-8 opacity-80">
             <Image
-              src="/ccmt_logo.webp"
+              src="/ccmt_logo.png"
               alt="CCMT Logo"
               fill
               className="object-contain"

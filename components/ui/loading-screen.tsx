@@ -11,7 +11,7 @@ export function LoadingScreen() {
         <div className="absolute inset-0 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
         <div className="relative size-full p-3">
           <Image 
-            src="/ccmt_logo.webp" 
+            src="/ccmt_logo.png" 
             alt="CCMT Logo" 
             fill
             className="object-contain p-2"
